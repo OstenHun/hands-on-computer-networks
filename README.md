@@ -2,7 +2,11 @@
 
 요약: 개념을 읽고 패킷·로그를 관찰하며 직접 실험하는 컴퓨터 네트워크 공개 학습 자료다. 혼자 공부하거나 함께 스터디하며 기초 원리부터 Linux 실습·기본 클라우드 운영까지 익힌다.
 
-**[학습 사이트 바로가기](https://ostenhun.github.io/aolda-network-study-4th/)** · [전체 개념 색인](https://ostenhun.github.io/aolda-network-study-4th/materials/week-01/concept-index.html) · [교재 원본](content/materials/)
+**[학습 사이트 바로가기](https://ostenhun.github.io/hands-on-computer-networks/)** · [전체 개념 색인](https://ostenhun.github.io/hands-on-computer-networks/materials/week-01/concept-index.html) · [교재 원본](content/materials/)
+
+**[English learning site](https://ostenhun.github.io/hands-on-computer-networks/en/)** · [English README](README.en.md)
+
+홈과 1주차의 기본 학습 경로는 한국어·영어로 읽을 수 있다. 번역된 페이지 상단의 **한국어 / English**로 같은 교재를 오간다. 2~16주차와 일부 선택 자료는 한국어로 제공한다.
 
 아주대학교 클라우드 운영 소학회 [아올다](https://www.aoldacloud.com/)의 4기 네트워크 스터디에서 시작한 공개 학습 프로젝트다. 소속과 관계없이 개인 학습과 다른 스터디에서도 활용할 수 있다.
 
@@ -27,29 +31,29 @@ IP 주소와 포트를 배웠어도 연결 실패와 HTTP 오류를 구별하기
 
 ## 지금 읽을 수 있는 주제
 
-- **[VM·SSH 준비](https://ostenhun.github.io/aolda-network-study-4th/materials/ssh-top-down/index.html)**: Linux VM, 접속 주소, 서버 신뢰와 SSH 인증을 다룬다. 내 PC에서 어느 서버에 접속한 것일까?
-- **[1주차 · 요청과 응답](https://ostenhun.github.io/aolda-network-study-4th/materials/week-01/index.html)**: 클라이언트·서버, IP와 포트, HTTP, 로그와 패킷을 다룬다. 요청 하나는 어디로 가고 어떤 응답을 받을까?
-- **[2주차 · IPv4와 서브넷](https://ostenhun.github.io/aolda-network-study-4th/materials/week-02/index.html)**: IPv4, 서브넷 마스크, CIDR, 주소 범위와 경로를 다룬다. IP가 비슷하면 같은 네트워크일까?
-- **[3주차 · LAN과 다음 홉](https://ostenhun.github.io/aolda-network-study-4th/materials/week-03/index.html)**: LAN, MAC 주소, 다음 홉, ARP 캐시, ICMP와 ping을 다룬다. 패킷은 누구에게 먼저 갈까?
-- **[4주차 · TCP와 UDP](https://ostenhun.github.io/aolda-network-study-4th/materials/week-04/index.html)**: 소켓, RTT, 연결 수립, 바이트 스트림과 데이터그램, SEQ/ACK를 다룬다. TCP가 데이터를 전달하면 프로그램의 처리도 끝난 것일까?
-- **[5주차 · DNS와 DHCP](https://ostenhun.github.io/aolda-network-study-4th/materials/week-05/index.html)**: 재귀/권한 DNS, A/AAAA, 캐시·TTL과 DHCP 임대·설정 옵션을 다룬다. 이름에서 IP를 찾았는데 왜 요청은 실패할까?
-- **[6주차 · HTTP·TLS·SSH](https://ostenhun.github.io/aolda-network-study-4th/materials/week-06/index.html)**: HTTP 메시지·재사용·캐시, TLS 신원 검증과 SSH 인증을 다룬다. 같은 IP인데 이름이 다르면 왜 HTTPS가 거절될까?
-- **[7주차 · 정적 경로](https://ostenhun.github.io/aolda-network-study-4th/materials/week-07/index.html)**: 최장 접두사·다음 홉·왕복 경로·TTL을 다룬다. 가는 경로가 있는데 왜 응답은 돌아오지 않을까?
-- **[8주차 · 중간 복습·IPv6](https://ostenhun.github.io/aolda-network-study-4th/materials/week-08/index.html)**: 전체 요청 흐름·RTT·손실 복구 모형·IPv6/NDP를 비교하고 단일 장애를 진단한다. 같은 요청을 다시 보내면 무엇을 생략할까?
-- **[9주차 · 링크·VLAN·STP·LACP](https://ostenhun.github.io/aolda-network-study-4th/materials/week-09/index.html)**: MAC 학습·VLAN·STP 경로·LACP 멤버 전환과 오류 검출을 다룬다. 같은 스위치인데 왜 닿지 않을까?
-- **[10주차 · 동적 라우팅·OSPF](https://ostenhun.github.io/aolda-network-study-4th/materials/week-10/index.html)**: LS/DV 계산·AS/BGP 정책과 실제 FRR 세 라우터의 이웃·경로·링크 전환을 다룬다. 링크가 끊기면 경로표는 누가 고칠까?
+- **[VM·SSH 준비](https://ostenhun.github.io/hands-on-computer-networks/materials/ssh-top-down/index.html)**: Linux VM, 접속 주소, 서버 신뢰와 SSH 인증을 다룬다. 내 PC에서 어느 서버에 접속한 것일까?
+- **[1주차 · 요청과 응답](https://ostenhun.github.io/hands-on-computer-networks/materials/week-01/index.html)**: 클라이언트·서버, IP와 포트, HTTP, 로그와 패킷을 다룬다. 요청 하나는 어디로 가고 어떤 응답을 받을까?
+- **[2주차 · IPv4와 서브넷](https://ostenhun.github.io/hands-on-computer-networks/materials/week-02/index.html)**: IPv4, 서브넷 마스크, CIDR, 주소 범위와 경로를 다룬다. IP가 비슷하면 같은 네트워크일까?
+- **[3주차 · LAN과 다음 홉](https://ostenhun.github.io/hands-on-computer-networks/materials/week-03/index.html)**: LAN, MAC 주소, 다음 홉, ARP 캐시, ICMP와 ping을 다룬다. 패킷은 누구에게 먼저 갈까?
+- **[4주차 · TCP와 UDP](https://ostenhun.github.io/hands-on-computer-networks/materials/week-04/index.html)**: 소켓, RTT, 연결 수립, 바이트 스트림과 데이터그램, SEQ/ACK를 다룬다. TCP가 데이터를 전달하면 프로그램의 처리도 끝난 것일까?
+- **[5주차 · DNS와 DHCP](https://ostenhun.github.io/hands-on-computer-networks/materials/week-05/index.html)**: 재귀/권한 DNS, A/AAAA, 캐시·TTL과 DHCP 임대·설정 옵션을 다룬다. 이름에서 IP를 찾았는데 왜 요청은 실패할까?
+- **[6주차 · HTTP·TLS·SSH](https://ostenhun.github.io/hands-on-computer-networks/materials/week-06/index.html)**: HTTP 메시지·재사용·캐시, TLS 신원 검증과 SSH 인증을 다룬다. 같은 IP인데 이름이 다르면 왜 HTTPS가 거절될까?
+- **[7주차 · 정적 경로](https://ostenhun.github.io/hands-on-computer-networks/materials/week-07/index.html)**: 최장 접두사·다음 홉·왕복 경로·TTL을 다룬다. 가는 경로가 있는데 왜 응답은 돌아오지 않을까?
+- **[8주차 · 중간 복습·IPv6](https://ostenhun.github.io/hands-on-computer-networks/materials/week-08/index.html)**: 전체 요청 흐름·RTT·손실 복구 모형·IPv6/NDP를 비교하고 단일 장애를 진단한다. 같은 요청을 다시 보내면 무엇을 생략할까?
+- **[9주차 · 링크·VLAN·STP·LACP](https://ostenhun.github.io/hands-on-computer-networks/materials/week-09/index.html)**: MAC 학습·VLAN·STP 경로·LACP 멤버 전환과 오류 검출을 다룬다. 같은 스위치인데 왜 닿지 않을까?
+- **[10주차 · 동적 라우팅·OSPF](https://ostenhun.github.io/hands-on-computer-networks/materials/week-10/index.html)**: LS/DV 계산·AS/BGP 정책과 실제 FRR 세 라우터의 이웃·경로·링크 전환을 다룬다. 링크가 끊기면 경로표는 누가 고칠까?
 
-- **[11주차 · NAT·접근 정책](https://ostenhun.github.io/aolda-network-study-4th/materials/week-11/index.html)**: NAT/PAT의 왕복 대응과 접근 규칙의 방향·순서·상태를 배우고, 격리 HTTP 서버의 허용·차단·복구를 직접 비교한다.
+- **[11주차 · NAT·접근 정책](https://ostenhun.github.io/hands-on-computer-networks/materials/week-11/index.html)**: NAT/PAT의 왕복 대응과 접근 규칙의 방향·순서·상태를 배우고, 격리 HTTP 서버의 허용·차단·복구를 직접 비교한다.
 
-- **[12주차 · 무선·망 구성·VPN](https://ostenhun.github.io/aolda-network-study-4th/materials/week-12/index.html)**: 무선 상태·매체 접근·VPN 전후 경로를 제공 자료로 분석하고 작은 망의 분리·허용 경로·보호 경계를 그린다.
+- **[12주차 · 무선·망 구성·VPN](https://ostenhun.github.io/hands-on-computer-networks/materials/week-12/index.html)**: 무선 상태·매체 접근·VPN 전후 경로를 제공 자료로 분석하고 작은 망의 분리·허용 경로·보호 경계를 그린다.
 
-- **[13주차 · 클라우드 네트워크](https://ostenhun.github.io/aolda-network-study-4th/materials/week-13/index.html)**: 자기 VM의 자원·양끝 요청·테스트 접근 규칙 변경/복구를 연결하고 MTU·MSS·PMTUD를 제공 사례로 분석한다.
+- **[13주차 · 클라우드 네트워크](https://ostenhun.github.io/hands-on-computer-networks/materials/week-13/index.html)**: 자기 VM의 자원·양끝 요청·테스트 접근 규칙 변경/복구를 연결하고 MTU·MSS·PMTUD를 제공 사례로 분석한다.
 
-- **[14주차 · 성능·트래픽 분산](https://ostenhun.github.io/aolda-network-study-4th/materials/week-14/index.html)**: 지연·BDP·윈도 상한과 고전 혼잡 그래프를 읽고 정상/서버 대기·프록시 분산/제외/복구를 직접 비교한다.
+- **[14주차 · 성능·트래픽 분산](https://ostenhun.github.io/hands-on-computer-networks/materials/week-14/index.html)**: 지연·BDP·윈도 상한과 고전 혼잡 그래프를 읽고 정상/서버 대기·프록시 분산/제외/복구를 직접 비교한다.
 
-- **[15주차 · 소켓·작은 자동화](https://ostenhun.github.io/aolda-network-study-4th/materials/week-15/index.html)**: 소켓 경계·부분 수신·EOF·시간제한을 읽고 종료 조건 변경·원복과 HTTP 수동/자동 기록을 대조한다.
+- **[15주차 · 소켓·작은 자동화](https://ostenhun.github.io/hands-on-computer-networks/materials/week-15/index.html)**: 소켓 경계·부분 수신·EOF·시간제한을 읽고 종료 조건 변경·원복과 HTTP 수동/자동 기록을 대조한다.
 
-- **[16주차 · 종합 장애 진단](https://ostenhun.github.io/aolda-network-study-4th/materials/week-16/index.html)**: 기존 서비스의 두 가설·구별 관찰·최소 변경·복구와 C16·O01~O05의 근거를 연결한다.
+- **[16주차 · 종합 장애 진단](https://ostenhun.github.io/hands-on-computer-networks/materials/week-16/index.html)**: 기존 서비스의 두 가설·구별 관찰·최소 변경·복구와 C16·O01~O05의 근거를 연결한다.
 
 공개 자료는 VM·SSH 준비와 1~16주차의 질문·교재·실습·복습으로 구성된다. 후속 SRE·플랫폼·클라우드 심화는 별도 학습 범위다. 자료 열람과 실제 실습·독립 이해는 구별하며, 완료 여부는 각자가 실행하고 설명한 근거로 확인한다.
 
@@ -60,7 +64,7 @@ IP 주소와 포트를 배웠어도 연결 실패와 HTTP 오류를 구별하기
 2주차부터 한 주의 자료는 **개인 공부·실습 → 주 1회 오프라인 마무리 → 보충**의 흐름으로 사용한다. 1주차의 기존 학습 기록은 유지한다.
 
 1. **모임 전에 공부하고 실습을 시도한다.** 학습 홈에서 범위를 찾고 질문에 먼저 답한 뒤 교재·공식 지정 절·복습·해설과 대조한다. 실습은 정상 기준·한 조건 변경·비교·복구를 확인한다.
-2. **질문·혼동·핵심을 기존 개인 노트에 정리한다.** 주요 질문과 내 답, 헷갈리는 개념 비교, 꼭 기억하고 이해할 핵심 개념을 중심으로 이유·조건·실습 근거를 연결한다. [개념 색인의 정리 방법](https://ostenhun.github.io/aolda-network-study-4th/materials/week-01/concept-index.html#personal-study)과 각 주차 안내에서 시작한다. 새 양식이나 정해진 분량은 없다.
+2. **질문·혼동·핵심을 기존 개인 노트에 정리한다.** 주요 질문과 내 답, 헷갈리는 개념 비교, 꼭 기억하고 이해할 핵심 개념을 중심으로 이유·조건·실습 근거를 연결한다. [개념 색인의 정리 방법](https://ostenhun.github.io/hands-on-computer-networks/materials/week-01/concept-index.html#personal-study)과 각 주차 안내에서 시작한다. 새 양식이나 정해진 분량은 없다.
 3. **모임에서 각자 시도한 근거를 비교한다.** 본인의 출력·풀이와 막힌 이유를 설명하고, 결과가 다르면 설정·조건·관찰 위치를 대조한다. 필요한 단계와 새 조건·복구를 각자 확인한다. 이미 마친 정상 실습을 전부 반복할 필요는 없다.
 4. **남은 부분을 보충한다.** 처음 헷갈린 이유·고친 설명과 근거를 개인 노트에 보완한다. 제공 자료 분석과 직접 실행을 구별하고 미완료 수행을 다음 보충으로 남긴다.
 

@@ -1,5 +1,5 @@
 {
-  "name": "aolda-network-study",
+  "name": "hands-on-computer-networks",
   "private": true,
   "type": "module",
   "engines": { "node": ">=22.22.0" },

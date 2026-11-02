@@ -24,9 +24,10 @@ def read_catalog(root):
     return json.loads(path.read_text(encoding='utf-8'))
 
 
-def lesson_text(data):
+def lesson_text(data, language='ko'):
     text = data.decode('utf-8-sig').replace('\r\n', '\n')
-    match = re.match(r'\A# ([^\n]+)\n+요약: ([^\n]+)\n', text)
+    label = 'Summary' if language == 'en' else '요약'
+    match = re.match(r'\A# ([^\n]+)\n+' + label + r': ([^\n]+)\n', text)
     if not match or not match[1].strip() or not 1 <= len(match[2].strip()) <= 200:
         raise ValueError('A lesson needs one opening H1 and a summary of 1–200 characters')
     return match[1].strip(), match[2].strip(), text[match.end():].lstrip('\n')
@@ -37,6 +38,10 @@ def validate_catalog(catalog, payload):
     groups = {}
     prefixes = []
     for group in catalog['groups']:
+        if group.get('lang', 'ko') not in ('ko', 'en'):
+            raise ValueError('Only Korean and English courses are supported')
+        if group['prefix'].startswith('en/') != (group.get('lang', 'ko') == 'en'):
+            raise ValueError('English courses must use the en/ prefix')
         key = group['id']
         if not re.fullmatch(r'[a-z0-9-]+', key) or key in groups:
             raise ValueError(f'Duplicate or invalid course ID: {key}')
@@ -77,7 +82,8 @@ def validate_catalog(catalog, payload):
         if page.get('kind', 'lesson') not in ('lesson', 'review'):
             raise ValueError('Only lesson and review pages are supported')
         page['kind'] = page.get('kind', 'lesson')
-        title, summary, body = lesson_text(payload[page['source']])
+        page['lang'] = group.get('lang', 'ko')
+        title, summary, body = lesson_text(payload[page['source']], page['lang'])
         page.update(title=title, summary=summary, body=body, group_label=group['label'])
         questions = re.findall(r'^#{2,3} (Q\d+)\b([^\n]*)$', body, re.M) if page['kind'] == 'review' else []
         if page['kind'] == 'review' and (not questions or len({q[0] for q in questions}) != len(questions)):
@@ -86,7 +92,7 @@ def validate_catalog(catalog, payload):
         nav = group.setdefault('nav', [])
         if not any(item['path'] == page['output'] for item in nav):
             nav.append({'path': page['output'], 'label': page.get('label', title)})
-    available = set(payload) | outputs
+    available = set(payload) | outputs | {'index.html', 'en/index.html'}
     for group in groups.values():
         if group['entry'] not in available or any(item['path'] not in available for item in group.get('nav', [])):
             raise ValueError(f'Course contains a missing page: {group["id"]}')
@@ -96,6 +102,17 @@ def validate_catalog(catalog, payload):
         if source not in payload or output not in available:
             raise ValueError('Document mapping contains a missing source or output')
     catalog['documents'].update({page['source']: page['output'] for page in catalog['lessons']})
+    pairs = catalog.get('translations', {})
+    if len(set(pairs.values())) != len(pairs):
+        raise ValueError('Translated pages must have a single Korean counterpart')
+    for ko, en in pairs.items():
+        local_path(ko, '.html')
+        local_path(en, '.html')
+        if ko.startswith('en/') or not en.startswith('en/') or ko not in available or en not in available:
+            raise ValueError('Translation pairs must reference existing Korean and English pages')
+    english_pages = {page['output'] for page in catalog['lessons'] if page['lang'] == 'en'}
+    if not english_pages <= set(pairs.values()):
+        raise ValueError('Every English lesson needs its Korean counterpart')
     return catalog
 
 

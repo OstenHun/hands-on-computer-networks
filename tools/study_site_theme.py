@@ -4,6 +4,7 @@ from pathlib import PurePosixPath
 import json
 import posixpath
 import re
+from localization import page_language, language_links, english_shell
 
 
 
@@ -23,7 +24,7 @@ def apply_theme(payload, root, catalog):
     payload['assets/study-site.js'] = (root / 'tools/study-site.js').read_bytes()
     searchable = []
     for name, data in payload.items():
-        if not name.endswith('.html') or name == 'index.html':
+        if not name.endswith('.html') or name in ('index.html', 'en/index.html'):
             continue
         # Compatibility redirects are reachable but don't duplicate search results.
         if 'http-equiv="refresh"' in data.decode():
@@ -34,6 +35,8 @@ def apply_theme(payload, root, catalog):
         searchable.append({'title': page_title(data.decode()), 'group': group, 'path': name, 'keywords': keywords})
     searchable.sort(key=lambda item: (item['group'], item['path']))
 
+    all_groups, all_labels, all_nav = groups, GROUPS, NAV
+    pairs = catalog.get('translations', {})
     for name, data in list(payload.items()):
         if not name.endswith('.html'):
             continue
@@ -43,6 +46,11 @@ def apply_theme(payload, root, catalog):
         # Retain legacy lesson sources while giving every published tab the site name.
         html = re.sub(r'(<title>[^<]*?) · 아올다[^<]*(</title>)', r'\1 · 실습으로 배우는 네트워크\2', html, count=1)
         html = re.sub(r'<footer\b[\s\S]*?</footer>', lambda match: match[0].replace('아올다 4기 네트워크 스터디', '실습으로 배우는 네트워크'), html)
+        language = page_language(name)
+        prefix = 'en/' if language == 'en' else ''
+        groups = {key: group for key, group in all_groups.items() if group.get('lang', 'ko') == language}
+        GROUPS = {key: all_labels[key] for key in groups}
+        NAV = {key: all_nav[key] for key in groups}
         current_group = next((key for key in GROUPS if name.startswith(groups[key]['prefix'])), None)
 
         def href(target):
@@ -52,9 +60,10 @@ def apply_theme(payload, root, catalog):
             current = ' aria-current="page"' if target == name else ''
             return f'<a href="{escape(href(target), quote=True)}"{current}{extra}>{label}</a>'
 
-        sidebar = link('index.html', '학습 홈')
-        sidebar += '<span class="sidebar-group-title">시작하기 전에</span>'
-        sidebar += link('materials/ssh-top-down/index.html', 'VM·SSH 접속 준비')
+        sidebar = link(prefix + 'index.html', '학습 홈')
+        if language == 'ko':
+            sidebar += '<span class="sidebar-group-title">시작하기 전에</span>'
+            sidebar += link('materials/ssh-top-down/index.html', 'VM·SSH 접속 준비')
         if current_group == 'ssh-top-down':
             sidebar += '<div class="sidebar-children">' + ''.join(link(path, label) for path, label in NAV['ssh-top-down'][1:]) + '</div>'
         sidebar += '<span class="sidebar-group-title">공통 과정</span>'
@@ -75,28 +84,36 @@ def apply_theme(payload, root, catalog):
                 if current_group == course['id'] and course.get('nav'):
                     sidebar += '<div class="sidebar-children">' + ''.join(link(page['path'], escape(page['label'])) for page in course['nav'] if page['path'] != course['entry']) + '</div>'
         sidebar += '<span class="sidebar-group-title">다시 찾아보기</span>'
-        sidebar += link('materials/week-01/concept-index.html', '전체 개념 색인')
-        sidebar += link('materials/week-01/interview-references.html', '면접·개발 참고자료')
+        if language == 'ko':
+            sidebar += link('materials/week-01/concept-index.html', '전체 개념 색인')
+            sidebar += link('materials/week-01/interview-references.html', '면접·개발 참고자료')
+        else:
+            sidebar += link('en/materials/week-01/sources.html', 'Sources and further reading')
+            sidebar += link('index.html', 'Full course (Korean)', ' lang="ko" hreflang="ko"')
         sidebar += '<div class="sidebar-foot">질문 → 탐색 → 설명 → 확인<br>실습으로 배우는 네트워크</div>'
         logo = '<img class="study-brand-image" src="' + href('assets/aolda-logo.svg') + '" alt="Aolda" width="119" height="30">'
-        topbar = '<a class="study-skip" href="#main">본문으로 건너뛰기</a><header class="study-topbar"><a class="study-logo" aria-label="실습으로 배우는 네트워크 학습 홈" href="' + href('index.html') + '">실습으로 배우는 네트워크</a><div class="study-top-actions"><button class="study-search-trigger" type="button" aria-haspopup="dialog">자료 검색 <kbd aria-hidden="true">/</kbd></button><button class="study-menu" type="button" aria-expanded="false" aria-controls="study-sidebar">학습 메뉴</button></div></header><nav id="study-sidebar" class="study-sidebar" aria-label="전체 학습 경로">' + sidebar + '</nav>'
+        topbar = '<a class="study-skip" href="#main">본문으로 건너뛰기</a><header class="study-topbar"><a class="study-logo" aria-label="실습으로 배우는 네트워크 학습 홈" href="' + href(prefix + 'index.html') + '">실습으로 배우는 네트워크</a><div class="study-top-actions">' + (language_links(name, pairs) if pairs else '') + '<button class="study-search-trigger" type="button" aria-haspopup="dialog">자료 검색 <kbd aria-hidden="true">/</kbd></button><button class="study-menu" type="button" aria-expanded="false" aria-controls="study-sidebar">학습 메뉴</button></div></header><nav id="study-sidebar" class="study-sidebar" aria-label="전체 학습 경로">' + sidebar + '</nav>'
         breadcrumb = ''
-        if name != 'index.html':
-            breadcrumb = '<nav class="study-breadcrumb" aria-label="현재 위치">' + link('index.html', '학습 홈') + '<span aria-hidden="true">/</span>'
+        if name != prefix + 'index.html':
+            breadcrumb = '<nav class="study-breadcrumb" aria-label="현재 위치">' + link(prefix + 'index.html', '학습 홈') + '<span aria-hidden="true">/</span>'
             if current_group:
                 index = groups[current_group]['entry']
                 group_label = escape(GROUPS[current_group])
                 breadcrumb += (link(index, group_label) if index in payload and groups[current_group]['section'] != 'partial' else '<span>' + group_label + '</span>') + '<span aria-hidden="true">/</span>'
             breadcrumb += '<span>' + escape(page_title(html)) + '</span></nav>'
-        index = [{'title': p['title'], 'group': p['group'], 'keywords': p['keywords'], 'href': href(p['path'])} for p in searchable]
+        index = [{'title': p['title'], 'group': p['group'], 'keywords': p['keywords'], 'href': href(p['path'])} for p in searchable if page_language(p['path']) == language]
         search_data = json.dumps(index, ensure_ascii=False).replace('<', '\\u003c')
         search = '<dialog class="study-search-dialog" aria-labelledby="study-search-title"><div class="search-heading"><label id="study-search-title" for="study-search-input">공개 학습 자료 찾기</label><button class="search-close" type="button">닫기 <span aria-hidden="true">Esc</span></button></div><div class="search-field"><input id="study-search-input" type="search" autocomplete="off" placeholder="주차나 개념 이름으로 검색"></div><div class="search-status" role="status" aria-live="polite"></div><div class="search-results"></div></dialog><script type="application/json" id="study-search-data">' + search_data + '</script><script src="' + href('assets/study-site.js') + '" defer></script>'
         # Replace only the old generated global-home strip; preserve lesson DOM/scripts.
         html = re.sub(r'<div style="padding:10px 20px;[^\"]*"><a href="[^\"]*">스터디 학습 홈</a></div>', '', html, count=1)
         if not re.search(r'\bid="main"', html):
             html = re.sub(r'<main\b', '<main id="main"', html, count=1)
+        if language == 'en':
+            topbar, breadcrumb, search = map(english_shell, (topbar, breadcrumb, search))
         html = re.sub(r'<body([^>]*)>', lambda match: '<body class="study-site"' + match[1] + '>' + topbar + '<div class="study-workspace">' + breadcrumb, html, count=1)
-        html = html.replace('</body>', '<div class="study-bottom"><div class="study-footer-brand">' + logo + '<span>아주대학교 클라우드 운영 소학회 아올다의<br>4기 네트워크 스터디에서 시작했습니다.</span></div>' + link('materials/week-01/concept-index.html', '개념 색인 ↗') + '</div></div>' + search + '</body>')
+        reference = link('materials/week-01/concept-index.html', '개념 색인 ↗') if language == 'ko' else link('en/materials/week-01/sources.html', 'Sources ↗')
+        footer = '<div class="study-bottom"><div class="study-footer-brand">' + logo + '<span>아주대학교 클라우드 운영 소학회 아올다의<br>4기 네트워크 스터디에서 시작했습니다.</span></div>' + reference + '</div></div>'
+        html = html.replace('</body>', (english_shell(footer) if language == 'en' else footer) + search + '</body>')
         # Use one official favicon instead of legacy page-specific placeholders.
         html = re.sub(r'<link\b(?=[^>]*\brel=[\"\'](?:shortcut )?icon[\"\'])[^>]*>', '', html, flags=re.I)
         html = html.replace('</head>', '<link rel="icon" type="image/svg+xml" href="' + href('assets/aolda-icon.svg') + '"></head>', 1)

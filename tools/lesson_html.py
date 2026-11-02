@@ -17,6 +17,7 @@ class LessonHTML(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.text = text
         self.lesson = lesson
+        self.en = lesson.get('lang') == 'en'
         self.documents = documents
         self.resolve = resolve
         self.edits = []
@@ -43,6 +44,8 @@ class LessonHTML(HTMLParser):
         key = self.question
         label = escape(self.questions[key], quote=True)
         field = f'<div class="answer-box"><label for="answer-{key}">{label} — 답과 근거</label><textarea id="answer-{key}" data-answer="{label} — 답과 근거" rows="5" placeholder="내 답과 판단 근거를 적으세요."></textarea></div>'
+        if self.en:
+            field = field.replace('답과 근거', 'answer and evidence').replace('내 답과 판단 근거를 적으세요.', 'Write your answer and supporting evidence.')
         self.edits.append((offset, offset, field))
         self.question = None
 
@@ -60,15 +63,16 @@ class LessonHTML(HTMLParser):
         if self.in_article and 'save-bar' in attrs.get('class', '').split():
             self.finish_question(offset)
         if self.in_article and tag == 'table':
-            self.edits.append((offset, offset, '<div class="table-scroll" role="region" tabindex="0" aria-label="가로로 스크롤할 수 있는 표">'))
+            table_label = 'Horizontally scrollable table' if self.en else '가로로 스크롤할 수 있는 표'
+            self.edits.append((offset, offset, '<div class="table-scroll" role="region" tabindex="0" aria-label="' + table_label + '">'))
         for attr in ('href', 'src'):
             value = attrs.get(attr)
             if not value:
                 continue
             url = urlsplit(value)
             target = None
-            if url.path.startswith('/aolda-network-study-4th/_astro/'):
-                target = url.path.removeprefix('/aolda-network-study-4th/')
+            if url.path.startswith('/hands-on-computer-networks/_astro/'):
+                target = url.path.removeprefix('/hands-on-computer-networks/')
             elif tag == 'a' and self.in_article and 'data-site-link' not in attrs and not url.scheme and not url.netloc and url.path:
                 source = self.resolve(self.lesson['source'], value)
                 target = source if 'download' in attrs else self.documents.get(source, source)

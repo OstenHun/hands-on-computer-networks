@@ -2,6 +2,7 @@ import importlib.util
 from pathlib import Path
 import sys
 import unittest
+from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -37,6 +38,14 @@ class PublicContentBoundary(unittest.TestCase):
 
     def test_public_sources_and_teaching_capture_pass(self):
         self.assertGreater(builder.check_public_sources(), 0)
+
+    def test_english_readme_has_the_same_public_source_boundary(self):
+        with TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / 'README.en.md').write_text('reader' + '@' + 'example.invalid', encoding='utf-8')
+            with patch.object(builder, 'ROOT', root), patch.object(builder, 'CONTENT', root / 'content'):
+                with self.assertRaisesRegex(ValueError, 'README.en.md'):
+                    builder.check_public_sources()
 
     def test_assembled_output_rejected_before_dist_is_written(self):
         for name, text in (

@@ -50,6 +50,16 @@ class CatalogContracts(unittest.TestCase):
         with self.assertRaises(ValueError):
             builder.validate_catalog(self.catalog, self.content)
 
+    def test_invalid_or_missing_translation_pairs_fail(self):
+        original = dict(self.catalog['translations'])
+        for pairs in ({'index.html': 'en/missing.html'},
+                      {'index.html': 'en/index.html', 'materials/week-01/index.html': 'en/index.html'},
+                      {}):
+            self.catalog['translations'] = pairs
+            with self.assertRaises(ValueError):
+                builder.validate_catalog(self.catalog, self.content)
+        self.catalog['translations'] = original
+
 
 class IntegratedAuthoring(unittest.TestCase):
     @classmethod
@@ -62,6 +72,7 @@ class IntegratedAuthoring(unittest.TestCase):
         page_count, link_count = builder.validate_links(self.payload)
         expected = {name for name in self.content if name.endswith('.html')}
         expected.add('index.html')
+        expected.add('en/index.html')
         expected.update(page['output'] for page in self.catalog['lessons'])
         self.assertEqual(page_count, len(expected))
         self.assertGreater(link_count, 3471)
@@ -72,11 +83,51 @@ class IntegratedAuthoring(unittest.TestCase):
         self.assertIn('TCP 연결 비용 읽기', home)
         self.assertIn('후속 심화', old)
         for page in self.catalog['lessons']:
-            self.assertIn(page['output'], home)
+            if page['output'].startswith('en/'):
+                self.assertNotIn('href="' + page['output'] + '"', home)
+            else:
+                self.assertIn(page['output'], home)
             self.assertIn('authoring-example', old)
         index = re.search(r'id="study-search-data">([\s\S]*?)</script>', home)[1]
         found = {item['href'] for item in json.loads(index)}
-        self.assertTrue({page['output'] for page in self.catalog['lessons']} <= found)
+        self.assertTrue({page['output'] for page in self.catalog['lessons'] if not page['output'].startswith('en/')} <= found)
+        self.assertFalse(any(path.startswith('en/') for path in found))
+
+    def test_language_switch_keeps_the_corresponding_page(self):
+        for ko, en in self.catalog['translations'].items():
+            for current, target, lang in ((ko, en, 'en'), (en, ko, 'ko')):
+                html = self.payload[current].decode()
+                links = re.findall(r'<nav class="study-language"[\s\S]*?</nav>', html)
+                self.assertEqual(len(links), 1, current)
+                self.assertIn('hreflang="' + lang + '"', links[0])
+                path = re.search(r'href="([^"]+)"', links[0])[1]
+                self.assertEqual(builder.resolve(current, path), target)
+                self.assertIn('<link rel="alternate" hreflang="' + lang + '"', html)
+                alternate = re.search(r'<link rel="alternate" hreflang="' + lang + r'" href="([^"]+)"', html)[1]
+                self.assertEqual(alternate, builder.SITE_URL + ('' if target == 'index.html' else target))
+        fallback = self.payload['materials/week-02/index.html'].decode()
+        control = re.search(r'<nav class="study-language"[\s\S]*?</nav>', fallback)[0]
+        self.assertIn('English home', control)
+        self.assertIn('this page is available in Korean', control)
+        self.assertNotIn('en/materials/week-02', control)
+
+    def test_english_search_and_downloads_stay_in_english(self):
+        for name, data in self.payload.items():
+            if not name.startswith('en/') or not name.endswith('.html'):
+                continue
+            html = data.decode()
+            self.assertIn('<html lang="en">', html)
+            self.assertIn('Find learning materials', html)
+            index = json.loads(re.search(r'id="study-search-data">([\s\S]*?)</script>', html)[1])
+            self.assertTrue(index)
+            self.assertTrue(all(builder.resolve(name, item['href']).startswith('en/') for item in index))
+            self.assertTrue(all(not re.search('[가-힣]', item['group']) for item in index))
+        review = self.payload['en/materials/week-01/review.html'].decode()
+        self.assertEqual(review.count('<textarea '), 10)
+        self.assertIn('Download my answers (Markdown)', review)
+        self.assertIn('download href="REVIEW.md"', review)
+        self.assertIn('Write your answer and supporting evidence.', review)
+        self.assertNotIn('내 답', review)
 
     def test_link_rewrite_and_download_are_distinct(self):
         review = self.payload['materials/authoring-example/review.html'].decode()

@@ -4,7 +4,7 @@ export default defineConfig({
   publicDir: './.astro-input/static',
   outDir: './.astro-output/',
   output: 'static',
-  base: '/aolda-network-study-4th',
+  base: '/hands-on-computer-networks',
   build: { format: 'file' },
   compressHTML: false,
   markdown: { syntaxHighlight: false }

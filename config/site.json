@@ -387,6 +387,66 @@
         "tag": "교재 · 직접 실습",
         "arrow": "→"
       }
+    },
+    {
+      "id": "en-week-01",
+      "lang": "en",
+      "label": "Week 1 · requests and responses",
+      "prefix": "en/materials/week-01/",
+      "entry": "en/materials/week-01/index.html",
+      "section": "common",
+      "number": "01",
+      "sidebar_title": "Requests and responses",
+      "nav": [
+        {
+          "path": "en/materials/week-01/index.html",
+          "label": "Learning guide"
+        },
+        {
+          "path": "en/materials/week-01/worksheet.html",
+          "label": "Shared question"
+        },
+        {
+          "path": "en/materials/week-01/concepts.html",
+          "label": "Concepts"
+        },
+        {
+          "path": "en/materials/week-01/articles.html",
+          "label": "Reading guide"
+        },
+        {
+          "path": "en/materials/week-01/essentials.html",
+          "label": "Essentials"
+        },
+        {
+          "path": "en/materials/week-01/linux.html",
+          "label": "Linux lab"
+        },
+        {
+          "path": "en/materials/week-01/code-reading.html",
+          "label": "Code walkthrough"
+        },
+        {
+          "path": "en/materials/week-01/sample-capture.html",
+          "label": "Supplied capture"
+        },
+        {
+          "path": "en/materials/week-01/review.html",
+          "label": "Review questions"
+        },
+        {
+          "path": "en/materials/week-01/answers.html",
+          "label": "Separate answers"
+        },
+        {
+          "path": "en/materials/week-01/sources.html",
+          "label": "Sources"
+        },
+        {
+          "path": "en/materials/week-01/facilitator.html",
+          "label": "Facilitator guide"
+        }
+      ]
     }
   ],
   "documents": {
@@ -786,15 +846,15 @@
       "label": "격리 실습·코드 읽기"
     },
     {
-        "id": "week09-real-l2",
-        "source": "materials/week-09/REAL_L2.md",
-        "output": "materials/week-09/real-l2.html",
-        "group": "week-09",
-        "kind": "lesson",
-        "label": "실제 STP·LACP 관찰"
-      },
-      {
-        "id": "week09-review",
+      "id": "week09-real-l2",
+      "source": "materials/week-09/REAL_L2.md",
+      "output": "materials/week-09/real-l2.html",
+      "group": "week-09",
+      "kind": "lesson",
+      "label": "실제 STP·LACP 관찰"
+    },
+    {
+      "id": "week09-review",
       "source": "materials/week-09/REVIEW.md",
       "output": "materials/week-09/review.html",
       "group": "week-09",
@@ -1280,6 +1340,117 @@
       "group": "week-16",
       "kind": "lesson",
       "label": "공식 출처"
+    },
+    {
+      "id": "en-week-01-index",
+      "source": "en/materials/week-01/README.md",
+      "output": "en/materials/week-01/index.html",
+      "group": "en-week-01",
+      "kind": "lesson",
+      "label": "Learning guide"
+    },
+    {
+      "id": "en-week-01-worksheet",
+      "source": "en/materials/week-01/WORKSHEET.md",
+      "output": "en/materials/week-01/worksheet.html",
+      "group": "en-week-01",
+      "kind": "lesson",
+      "label": "Shared question"
+    },
+    {
+      "id": "en-week-01-concepts",
+      "source": "en/materials/week-01/CONCEPTS.md",
+      "output": "en/materials/week-01/concepts.html",
+      "group": "en-week-01",
+      "kind": "lesson",
+      "label": "Concepts"
+    },
+    {
+      "id": "en-week-01-articles",
+      "source": "en/materials/week-01/ARTICLE_LESSON.md",
+      "output": "en/materials/week-01/articles.html",
+      "group": "en-week-01",
+      "kind": "lesson",
+      "label": "Reading guide"
+    },
+    {
+      "id": "en-week-01-essentials",
+      "source": "en/materials/week-01/ESSENTIALS.md",
+      "output": "en/materials/week-01/essentials.html",
+      "group": "en-week-01",
+      "kind": "lesson",
+      "label": "Essentials"
+    },
+    {
+      "id": "en-week-01-linux",
+      "source": "en/materials/week-01/LINUX.md",
+      "output": "en/materials/week-01/linux.html",
+      "group": "en-week-01",
+      "kind": "lesson",
+      "label": "Linux lab"
+    },
+    {
+      "id": "en-week-01-code-reading",
+      "source": "en/materials/week-01/CODE_READING.md",
+      "output": "en/materials/week-01/code-reading.html",
+      "group": "en-week-01",
+      "kind": "lesson",
+      "label": "Code walkthrough"
+    },
+    {
+      "id": "en-week-01-sample-capture",
+      "source": "en/materials/week-01/SAMPLE_CAPTURE.md",
+      "output": "en/materials/week-01/sample-capture.html",
+      "group": "en-week-01",
+      "kind": "lesson",
+      "label": "Supplied capture"
+    },
+    {
+      "id": "en-week-01-review",
+      "source": "en/materials/week-01/REVIEW.md",
+      "output": "en/materials/week-01/review.html",
+      "group": "en-week-01",
+      "kind": "review",
+      "label": "Review questions"
+    },
+    {
+      "id": "en-week-01-answers",
+      "source": "en/materials/week-01/ANSWERS.md",
+      "output": "en/materials/week-01/answers.html",
+      "group": "en-week-01",
+      "kind": "lesson",
+      "label": "Separate answers"
+    },
+    {
+      "id": "en-week-01-sources",
+      "source": "en/materials/week-01/SOURCES.md",
+      "output": "en/materials/week-01/sources.html",
+      "group": "en-week-01",
+      "kind": "lesson",
+      "label": "Sources"
+    },
+    {
+      "id": "en-week-01-facilitator",
+      "source": "en/materials/week-01/FACILITATOR.md",
+      "output": "en/materials/week-01/facilitator.html",
+      "group": "en-week-01",
+      "kind": "lesson",
+      "label": "Facilitator guide"
     }
-  ]
+  ],
+  "translations": {
+    "index.html": "en/index.html",
+    "materials/week-01/index.html": "en/materials/week-01/index.html",
+    "materials/week-01/worksheet.html": "en/materials/week-01/worksheet.html",
+    "materials/week-01/concepts.html": "en/materials/week-01/concepts.html",
+    "materials/week-01/articles.html": "en/materials/week-01/articles.html",
+    "materials/week-01/essentials.html": "en/materials/week-01/essentials.html",
+    "materials/week-01/linux.html": "en/materials/week-01/linux.html",
+    "materials/week-01/code-reading.html": "en/materials/week-01/code-reading.html",
+    "materials/week-01/sample-capture.html": "en/materials/week-01/sample-capture.html",
+    "materials/week-01/review.html": "en/materials/week-01/review.html",
+    "materials/week-01/answers.html": "en/materials/week-01/answers.html",
+    "materials/week-01/sources.html": "en/materials/week-01/sources.html",
+    "materials/week-01/facilitator.html": "en/materials/week-01/facilitator.html"
+  }
 }

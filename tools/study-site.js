@@ -1,5 +1,6 @@
 /* Site navigation and page-title search. Lesson models and answers are independent. */
 (() => {
+  const en = document.documentElement.lang === 'en';
   const menu = document.querySelector('.study-menu');
   const sidebar = document.querySelector('.study-sidebar');
   function closeMenu() {
@@ -38,7 +39,9 @@
       link.append(group, title);
       results.append(link);
     }
-    status.textContent = matches.length ? `${matches.length}개의 자료` : '찾는 자료가 없습니다. 주차나 개념 이름을 바꿔 보세요.';
+    status.textContent = en
+      ? (matches.length ? `${matches.length} learning materials` : 'No materials found. Try another week or concept.')
+      : (matches.length ? `${matches.length}개의 자료` : '찾는 자료가 없습니다. 주차나 개념 이름을 바꿔 보세요.');
   }
   function openSearch() {
     closeMenu();

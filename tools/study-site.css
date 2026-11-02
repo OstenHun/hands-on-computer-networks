@@ -22,6 +22,11 @@
 .study-site .study-footer-brand .study-brand-image { width: 95px; }
 .study-site .study-logo small { margin: 1px 0 0 9px; padding-left: 18px; border-left: 1px solid #d8e3eb; color: var(--muted); font-size: 14px; font-weight: 500; letter-spacing: 0; }
 .study-site .study-top-actions { display: flex; flex-shrink: 0; gap: 12px; align-items: center; }
+.study-site .study-language { display: flex; align-items: center; font-size: 13px; line-height: 1.5; white-space: nowrap; }
+.study-site .study-language a, .study-site .study-language span { display: flex; align-items: center; min-height: 44px; padding: 6px 9px; border-radius: 5px; }
+.study-site .study-language [aria-current] { color: var(--blue); background: var(--wash); font-weight: 700; }
+html[lang="en"] .study-site { font-family: "Segoe UI", "Malgun Gothic", sans-serif; letter-spacing: normal; }
+html[lang="en"] .study-site .study-logo { font-size: 20px; letter-spacing: -.02em; }
 .study-site .study-search-trigger, .study-site .study-menu { display: flex; align-items: center; justify-content: space-between; gap: 36px; min-height: 44px; padding: 6px 12px; background: #f7f9fb; border: 1px solid var(--line); border-radius: 6px; color: var(--muted); font-size: 14px; line-height: 1.5; cursor: pointer; }
 .study-site .study-search-trigger kbd { display: grid; place-items: center; width: 22px; height: 24px; background: white; border: 1px solid #d6e0e8; border-radius: 4px; color: #62778a; font: 14px/1 Consolas, monospace; }
 .study-site .study-menu { display: none; }
@@ -192,8 +197,11 @@
   .study-site .home-heading h1 { font-size: 40px; }
 }
 @media (max-width: 650px) {
+  .study-site .study-topbar .study-logo { flex-basis: 100%; min-height: 34px; font-size: 16px; }
+  .study-site .study-topbar .study-top-actions { width: 100%; justify-content: flex-end; }
+  .study-site .study-topbar .study-language { margin-right: auto; }
   .study-site { font-size: 16px; }
-  .study-site .study-topbar { padding-inline: 18px; gap: 10px; height: 64px; }
+  .study-site .study-topbar { padding: 6px 18px; gap: 10px; height: 108px; flex-wrap: wrap; }
   .study-site .study-logo { font-size: 16px; gap: 9px; }
   .study-site .study-logo .study-brand-image { width: 99px; }
   .study-site .study-logo small { display: none; }
@@ -201,7 +209,7 @@
   .study-site .study-search-trigger kbd { display: none; }
   .study-site .study-menu { font-size: 14px; padding-inline: 10px; }
   .study-site .study-top-actions { gap: 7px; }
-  .study-site .study-sidebar { top: 64px; }
+  .study-site .study-sidebar { top: 108px; }
   .study-site .study-breadcrumb { padding: 20px 22px 0; font-size: 14px; }
   .study-site .study-workspace > header, .study-site .study-workspace > .shell, .study-site .study-workspace > .wrap { padding-inline: 22px; }
   .study-site .study-workspace > header nav { gap: 5px 16px; font-size: 14px; padding-block: 12px; }

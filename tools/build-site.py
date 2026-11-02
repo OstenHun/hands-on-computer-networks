@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CONTENT = ROOT / "content"
 MD_LINK = re.compile(r'\[[^\]]*\]\(([^\s)]+)(?:\s+"[^\"]*")?\)')
 HEAD = '<meta name="robots" content="index,follow">'
-SITE_URL = 'https://ostenhun.github.io/aolda-network-study-4th/'
+SITE_URL = 'https://ostenhun.github.io/hands-on-computer-networks/'
 ALLOWED_SUFFIXES = {".html", ".md", ".txt", ".py", ".sh", ".mts", ".pcapng", ".svg"}
 
 
@@ -131,7 +131,7 @@ def check_public_sources():
         "internal service": r"https?://(?:console\.aolda\.net|(?:app\.)?notion\.(?:com|so))",
         "email address": r"[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}",
     }
-    files = [ROOT / name for name in ('README.md', 'AGENTS.md', 'package.json', 'package-lock.json', 'astro.config.mjs') if (ROOT / name).exists()]
+    files = [ROOT / name for name in ('README.md', 'README.en.md', 'AGENTS.md', 'package.json', 'package-lock.json', 'astro.config.mjs') if (ROOT / name).exists()]
     for folder in ("content", "tools", "docs", ".github", "config", "astro", "tests"):
         for path in (ROOT / folder).rglob('*'):
             if path.is_symlink():
@@ -230,16 +230,23 @@ def make_payload(catalog=None, content=None):
         raise ValueError('Generated assets cannot overwrite existing public files')
     payload.update(generated)
     home = (ROOT / "tools/templates/study-home.html").read_text(encoding="utf-8")
-    payload["index.html"] = home.replace("__HEAD__", HEAD).replace('__COURSE_PATH__', home_courses(catalog)).encode()
+    korean_catalog = dict(catalog, groups=[group for group in catalog['groups'] if group.get('lang', 'ko') == 'ko'])
+    payload["index.html"] = home.replace("__HEAD__", HEAD).replace('__COURSE_PATH__', home_courses(korean_catalog)).encode()
+    if catalog.get('translations'):
+        payload['en/index.html'] = (ROOT / 'tools/templates/study-home-en.html').read_bytes()
     apply_theme(payload, ROOT, catalog)
-    apply_search_metadata(payload)
+    apply_search_metadata(payload, catalog.get('translations', {}))
     return payload
 
 
-def apply_search_metadata(payload):
+def apply_search_metadata(payload, translations=None):
     """Index public lessons; keep the compatibility redirect out of search."""
     namespace = 'http://www.sitemaps.org/schemas/sitemap/0.9'
     sitemap = ET.Element('urlset', xmlns=namespace)
+    alternates = {}
+    for ko, en in (translations or {}).items():
+        links = ''.join('<link rel="alternate" hreflang="' + lang + '" href="' + escape(SITE_URL + ('' if path == 'index.html' else path), quote=True) + '">' for lang, path in (('ko', ko), ('en', en), ('x-default', ko)))
+        alternates[ko] = alternates[en] = links
     for name in sorted(payload):
         if not name.endswith('.html'):
             continue
@@ -251,7 +258,7 @@ def apply_search_metadata(payload):
         html = re.sub(r'<meta\b(?=[^>]*\bname=[\"\']robots[\"\'])[^>]*>', '', html, flags=re.I)
         html = re.sub(r'<link\b(?=[^>]*\brel=[\"\']canonical[\"\'])[^>]*>', '', html, flags=re.I)
         url = SITE_URL + ('' if name == 'index.html' else name)
-        metadata = HEAD + '<link rel="canonical" href="' + escape(url, quote=True) + '">'
+        metadata = HEAD + '<link rel="canonical" href="' + escape(url, quote=True) + '">' + alternates.get(name, '')
         payload[name] = html.replace('</head>', metadata + '</head>', 1).encode()
         ET.SubElement(ET.SubElement(sitemap, 'url'), 'loc').text = url
     payload['sitemap.xml'] = ET.tostring(sitemap, encoding='utf-8', xml_declaration=True)
