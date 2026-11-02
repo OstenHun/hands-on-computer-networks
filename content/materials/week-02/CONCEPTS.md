@@ -58,6 +58,8 @@ ens3     UP         192.0.2.10/24
 
 ## 4. /24와 /26은 어디에 선을 긋는가
 
+**CIDR(Classless Inter-Domain Routing)은 옛 A·B·C 클래스의 고정 경계 대신 접두사 길이로 주소 블록을 나타낸다.** 지금 주소를 계산할 때 “10으로 시작하니 무조건 /8”처럼 마스크를 추측하지 않는다. 실제로 주어진 주소와 접두사를 함께 읽는다.
+
 IPv4는 32비트이고, 우리가 읽는 네 개의 숫자는 8비트씩을 십진수로 표현한 것이다. 각 묶음은 0~255다. CIDR의 `/n`은 앞에서부터 네트워크 부분으로 사용하는 비트 수다. `/26`은 `/24`보다 네트워크 부분이 2비트 길고, 개별 주소를 구분할 부분은 2비트 짧다.
 
 ```text
@@ -137,6 +139,78 @@ default via 192.0.2.1 dev ens3
 **원문으로 확인:** [CIDR 질문](ARTICLE_LESSON.md#4-cidr-표기만으로-다음-홉이-정해질까)의 지정 절에서 접두사 표기와 자기 VM의 현재 경로표를 구분한다.
 
 **틀린 설명 고치기:** “같은 서브넷이고 인터페이스가 UP이니 HTTP도 성공한다.” 상대 상태·연결된 링크·중복 주소·정책·대기 중인 프로그램 중 무엇을 더 확인할지 말해 본다.
+
+<span id="route-cases"></span>
+
+<details>
+<summary>경로표가 두 줄보다 많다면? — 출력 예제로 비교하기</summary>
+
+아래는 **주소·경로를 새로 만든 설명용 출력**이다. 실행하거나 VM에 설정하는 값이 아니다. 기본 경로와 직접 연결 경로에, 주소 하나로 가는 경로가 더해졌다고 하자.
+
+~~~text
+default via 192.0.2.1 dev ens3 proto dhcp src 192.0.2.10 metric 100
+192.0.2.0/24 dev ens3 proto kernel scope link src 192.0.2.10 metric 100
+192.0.2.1 dev ens3 proto dhcp scope link src 192.0.2.10 metric 100
+192.0.2.3 dev ens3 proto dhcp scope link src 192.0.2.10 metric 100
+198.51.100.80 via 192.0.2.3 dev ens3 proto dhcp src 192.0.2.10 metric 100
+~~~
+
+| 읽을 부분 | 이 예제에서 뜻하는 것 |
+| --- | --- |
+| 목적지 뒤에 접두사가 없는 한 주소 | IPv4 경로표에서는 해당 주소 하나를 지정한 호스트 경로인 `/32`로 읽는다. 내 인터페이스에 붙은 주소라는 뜻은 아니다 |
+| `proto kernel` / `proto dhcp` | 주소 설정에 따라 커널이 만든 경로 / DHCP로 받은 정보를 바탕으로 설치된 경로. 전송할 패킷의 프로토콜 이름이 아니다 |
+| `scope link` | 이 경로는 해당 링크로 직접 전달하도록 설정돼 있다. 상대의 실제 응답까지 확인한 것은 아니다 |
+| `metric 100` | 비교 가능한 경로 후보 사이의 우선순위 값. 작은 값을 선호하지만 이것만 보고 전체 경로표에서 한 줄을 고르지 않는다 |
+
+같은 라우팅 테이블 안에서 목적지에 맞는 경로 중 **접두사가 가장 긴 것**을 먼저 고른다. 따라서 이 예제의 `198.51.100.80`은 기본 경로의 `.1`이 아니라, 주소 하나에 맞는 경로의 `.3`으로 간다. 표의 위아래 순서로 고르는 것이 아니다. 여러 테이블·정책이 있는 환경은 `ip -4 route get 목적지`의 실제 결과를 확인한다. 상세 원리는 [7주차 경로 교재](../week-07/CONCEPTS.md)로 이어진다.
+
+클라우드 VM에는 metadata 서비스용 추가 경로가 보일 수도 있다. 예를 들어 OpenStack에서 쓰는 `169.254.169.254`는 VM이 자기 설정 정보를 얻는 서비스 주소다. 이 주소가 경로표에 있다는 사실을 DHCP 실패나 인터넷 연결 성공으로 해석하지 않는다. 여기서는 용도만 구별하고 요청을 보내는 실습은 하지 않는다. DHCP 설정은 [5주차](../week-05/CONCEPTS.md), 실제 클라우드 구성은 [13주차](../week-13/CONCEPTS.md)에서 이어 본다. [iproute2 경로 필드](https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/man/man8/ip-route.8) · [OpenStack metadata](https://docs.openstack.org/neutron/latest/admin/intro-os-networking.html#metadata).
+
+</details>
+
+<span id="vpn-address-route"></span>
+
+<details>
+<summary>VPN은 켜졌는데 SSH가 안 된다면? — 주소와 경로 구별하기</summary>
+
+Wi-Fi와 WireGuard를 함께 쓰는 PC를 생각해 보자. 다음은 **문서용 주소로 만든 예시**이며 실제 접속 설정이 아니다.
+
+| 구분 | 예시 | 역할 |
+| --- | --- | --- |
+| Wi-Fi 인터페이스 주소 | `192.0.2.10/24` | 기존 네트워크에서 PC가 쓰는 주소 |
+| WireGuard 인터페이스 주소 | `198.51.100.10/32` | 터널 안에서 PC가 쓰는 주소. 갈 수 있는 목적지 전체를 뜻하지 않는다 |
+| 접속하려는 VM 주소 | `203.0.113.20` | SSH 요청의 최종 목적지 |
+| 상대 Endpoint | `198.51.100.200:51820` | 암호화된 바깥 UDP 패킷을 받는 피어의 주소·포트 |
+
+이 예제에서 VM으로 가는 경로가 WireGuard 인터페이스를 선택한다면, 안쪽 IP 목적지는 `203.0.113.20`, 바깥 IP 목적지는 Endpoint의 `198.51.100.200`이다. 바깥 패킷은 기존 Wi-Fi 연결을 통해 상대에게 간다. **VPN 인터페이스가 하나 늘어도 독립적인 물리 회선이 추가된 것은 아니다.**
+
+`AllowedIPs`는 송신할 때 목적지에 맞는 **피어**를 고르고, 수신할 때 그 피어가 보낸 안쪽 패킷의 **출발지 주소**를 검사하는 데 쓰인다. 운영체제가 먼저 패킷을 WireGuard 인터페이스로 보내도록 경로가 설정돼 있어야 한다. `wg-quick`처럼 AllowedIPs에서 OS 경로도 만드는 도구가 있지만, 경로 설치 방식은 실행 도구와 설정에 따라 다르다. AllowedIPs를 바꾸는 것만으로 경로·피어·방화벽·반환 경로·SSH 서비스가 모두 정상이라고 할 수는 없다. [WireGuard 공식 설명](https://www.wireguard.com/#cryptokey-routing) · [wg-quick(8)](https://git.zx2c4.com/wireguard-tools/about/src/man/wg-quick.8).
+
+VPN 인터페이스 주소가 보여도 VM 목적지 경로가 Wi-Fi 기본 경로를 선택할 수 있다. **주소 추가 → 목적지 경로 → 피어와의 암호화 통신 → VM의 SSH 응답**은 각각 다른 확인이다. 터널로 보내는 목적지를 제한한 구성에서는 모든 인터넷 트래픽이 VPN을 지나지도 않는다. 주소는 프로필 등에 미리 설정할 수 있으며, WireGuard 서버가 반드시 자동 배정하는 것은 아니다.
+
+Windows에서 선택 비교를 한다면 **PC의 PowerShell**에서 `Get-NetIPAddress -AddressFamily IPv4`로 주소를, `Find-NetRoute -RemoteIPAddress "허용된_VM_IPv4"`로 선택된 출발지 주소와 경로를 조회한다. 자리 표시자를 본인의 허용된 주소로 바꾸며 설정은 변경하지 않는다. **SSH 안의 Linux 명령은 VM의 경로를 읽는다.** PC·WSL·VM의 출력을 섞지 않는다. 이 비교는 기존 Linux P1을 대체하지 않는다. [Find-NetRoute 공식 설명](https://learn.microsoft.com/en-us/powershell/module/nettcpip/find-netroute).
+
+**SSH에 적은 주소가 VM의 `ip addr`에는 없다면?** OpenStack의 일반적인 Floating IP 구성에서는 외부 네트워크 쪽 주소로 온 패킷을 VM의 fixed IP로 변환해 전달할 수 있다. 예를 들어 별도 구성에서 접속 주소 `203.0.113.20`이 VM 내부 주소 `192.0.2.50`에 대응할 수 있다. Floating IP라는 이름이 반드시 인터넷 공인 주소라는 뜻은 아니다. 실제 주소 대응·변환 위치는 본인 환경의 설정을 봐야 한다. [OpenStack 일반 구성](https://docs.openstack.org/neutron/latest/admin/intro-os-networking.html#self-service-networks) · [11주차 NAT](../week-11/CONCEPTS.md) · [13주차 클라우드](../week-13/CONCEPTS.md).
+
+</details>
+
+<span id="same-network"></span>
+
+<details>
+<summary>같은 학교망·같은 Wi-Fi·같은 서브넷은 같은 말일까?</summary>
+
+| ‘같다’고 부르는 대상 | 뜻 | 그것만으로 알 수 없는 것 |
+| --- | --- | --- |
+| 학교·회사 전체 망 | 한 조직이 운영하는 네트워크 | 모든 장치가 같은 서브넷이거나 서로 접근 가능한지 |
+| IP 서브넷 | 주소와 접두사로 계산한 범위 | 실제로 같은 링크에 이어져 있는지 |
+| L2 연결 구역 | 프레임·브로드캐스트를 전달하도록 이어진 구역 | 모든 IP 통신과 서비스가 허용되는지 |
+| Wi-Fi 이름(SSID) | 무선 접속 목록에 보이는 이름 | 같은 AP·VLAN·IP 서브넷을 사용하는지 |
+
+우리 집과 친구 집이 모두 `192.168.0.0/24`를 써도 두 집의 링크가 이어진 것은 아니다. 학교에서도 같은 Wi-Fi 이름을 여러 건물에서 제공하면서 서로 다른 서브넷으로 나눌 수 있다. 서로 다른 서브넷 사이의 통신이 학교 내부 라우터를 통해 이뤄질 수도 있어, 반드시 인터넷을 나갔다 오는 것은 아니다. 실제 학교망 구조는 이 예시로 확정하지 않는다.
+
+‘어느 IP 경로를 고르는가’는 이번 주에, ‘그 링크에서 누가 프레임을 받는가’는 [3주차 LAN·MAC](../week-03/lan-mac.html#home-router)을 보며 구별한다. VLAN 구성은 [9주차](../week-09/CONCEPTS.md), AP 관리·로밍은 [12주차](../week-12/CONCEPTS.md)에서 이어 간다.
+
+</details>
 
 ## 7. 마스크만 다르면 양쪽 판단도 다르다
 

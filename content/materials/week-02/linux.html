@@ -138,6 +138,8 @@ ip -4 route
 <td><code>ip -4 route</code>의 <code>default</code> 줄 또는 없음</td>
 </tr>
 </tbody></table></div>
+<p><strong>기본 경로와 연결 경로 외에 여러 줄이 보인다면</strong> <a href="concepts.html#route-cases">여러 줄 경로표 예제</a>에서 호스트 경로·<code>proto</code>·<code>metric</code>을 비교한다. 표의 줄 수를 맞추거나 낯선 경로를 지울 필요는 없다. VPN 주소와 VM 접속 주소가 헷갈리면 <a href="concepts.html#vpn-address-route">VPN 주소·경로 비교</a>를 필요한 만큼 읽는다. 두 사례는 현재 P1 출력을 해석하기 위한 선택 설명이며 새 실습이나 제출 항목이 아니다.</p>
+
 <h2 id="2-목적지-경로-조회--패킷-전송이-아님">2. 목적지 경로 조회 — 패킷 전송이 아님</h2>
 <p><code>ip route get</code>은 목적지에 대한 현재 커널 경로 선택을 조회한다. 아래 문서용 주소는 실습 카드의 <strong>계산 대상</strong>이다. 임의의 공인 서버로 <code>ping</code>이나 HTTP 요청을 보내지 않는다.</p>
 <pre><code class="language-sh">ip -4 route get 127.0.0.1

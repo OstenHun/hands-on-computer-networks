@@ -114,6 +114,29 @@ IP packet inside: dst IP 192.0.2.20
 </code></pre>
 <p>스위치는 보통 프레임의 목적지 MAC을 보고 현재 구간의 전달 방향을 정한다. IP 목적지가 알려져 있어도 프레임의 목적지 MAC 칸을 비워 둔 채 Ethernet으로 보낼 수는 없다. “IP는 여정의 끝, MAC은 이번 링크의 받는 이웃”이라는 구분이 핵심이다. 다른 링크로 넘어갈 때 프레임 주소는 새 링크에 맞게 달라질 수 있다.</p>
 <p>Linux VM의 가상 NIC도 자기에게 제공된 가상 링크의 프레임을 송수신할 수 있다. 그렇다고 물리 호스트의 전체 패브릭, 다른 VM의 모든 패킷, PC의 무선 구간이 보인다는 뜻은 아니다. 캡처 위치와 권한에 따라 보이는 범위가 달라진다. 반면 1주차 <code>lo</code>는 같은 호스트 안의 루프백 경로이므로 Ethernet ARP를 기대할 곳이 아니다.</p>
+<p><span id="home-router"></span></p>
+<h3 id="같은-wi-fi끼리도-공유기를-거치는데-왜-직접-전달일까">같은 Wi-Fi끼리도 공유기를 거치는데, 왜 직접 전달일까?</h3>
+<p>집 공유기 한 상자에는 AP·스위치·라우터 등의 기능이 함께 들어갈 수 있다. ‘직접’은 중간 상자를 하나도 거치지 않는다는 뜻이 아니라, <strong>다른 IP 망으로 넘겨줄 게이트웨이를 다음 홉으로 고르지 않는다</strong>는 뜻이다.</p>
+<div class="table-scroll" role="region" tabindex="0" aria-label="가로로 스크롤할 수 있는 표"><table>
+<thead>
+<tr>
+<th>설명용 상황</th>
+<th>IP 경로와 첫 프레임</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A와 B가 같은 IP 서브넷·같은 L2 구역이고 직접 연결 경로를 선택</td>
+<td>AP·브리지·스위칭 기능을 통해 전달될 수 있다. Ethernet 쪽에서 IP 패킷을 담은 프레임의 목적 MAC은 B의 것이다</td>
+</tr>
+<tr>
+<td>A가 다른 망 D로 보내며 게이트웨이 경로를 선택</td>
+<td>Ethernet 쪽 첫 프레임의 목적 MAC은 게이트웨이의 것이다. NAT 없는 모형에서 안쪽 IP 목적지는 D다</td>
+</tr>
+</tbody>
+</table></div>
+<p>같은 Wi-Fi 이름이나 같은 주소 범위만으로 위 첫 조건이 성립하지는 않는다. 클라이언트 격리·VLAN·방화벽 설정으로 서로 통신하지 못할 수도 있다. 무선 구간의 802.11 프레임은 Ethernet과 주소 형식이 다르므로 이 표를 Wi-Fi 캡처의 모든 주소 칸에 그대로 적용하지 않는다. VM의 Ethernet NIC에서 보이는 범위와 PC의 무선 구간을 구분한다. <a href="../week-02/concepts.html#same-network">2주차의 ‘같은 망’ 비교</a> · <a href="../week-09/concepts.html">9주차 VLAN</a> · <a href="../week-12/concepts.html">12주차 무선</a>.</p>
+
 <h2 id="예측과-확인">예측과 확인</h2>
 <p>위 그림에서 HTTP 메시지를 보낸다면 IP 목적지와 첫 <strong>IP 패킷을 담은 프레임</strong>의 목적지 MAC을 각각 적어 보자. A가 외부 목적지에 보낸다면 둘이 여전히 같은 장치를 가리킬지 예상한다. 그 차이는 다음 <a href="next-hop.html">다음 홉</a>에서 확인한다.</p>
 <p><strong>확인 질문:</strong> VM 가상 NIC에서 A의 ARP 요청을 보았더라도, 개인 PC의 Wi-Fi 구간에 흐르는 모든 프레임을 관찰했다고 말할 수 있는가? 왜 그런가?</p>

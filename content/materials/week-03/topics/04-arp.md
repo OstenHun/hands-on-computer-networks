@@ -27,6 +27,21 @@ Linux의 `ip -4 neigh show`는 IPv4 이웃 정보를 **조회**한다. 예를 �
 
 IPv6의 주소 탐색은 별도 **Neighbor Discovery Protocol(NDP)**을 사용한다. 이 설명은 **Linux의 IPv4 over Ethernet**에 한정한다. `lo`에는 이 Ethernet ARP 흐름을 적용하지 않는다.
 
+<span id="interface-arp"></span>
+
+### 인터페이스가 보이면 MAC과 ARP도 있어야 할까?
+
+인터페이스는 OS가 패킷을 주고받는 접점이다. 모두 Ethernet처럼 동작하는 것은 아니다.
+
+| 관찰 위치 | 구별할 점 |
+| --- | --- |
+| VM의 Ethernet NIC | 다음 홉의 IPv4→MAC 매핑을 이웃 정보에서 찾는다. 캐시가 있으면 새 ARP가 안 보일 수 있다 |
+| 루프백 `lo` | 같은 호스트 안의 전달이다. 위 Ethernet ARP 흐름을 요구하지 않는다 |
+| 기본 WireGuard 터널 인터페이스 | 안쪽 IP 패킷을 다룬다. Ethernet 목적 MAC을 채우기 위한 ARP를 터널 자체에 요구하지 않는다 |
+| WireGuard 바깥 패킷이 나가는 실제 링크 | Endpoint로 가는 바깥 UDP/IP 패킷을 전달한다. 그 링크가 Ethernet이면 다음 홉의 MAC 매핑이 필요할 수 있다 |
+
+따라서 **‘캐시가 있어 새 ARP가 없음’과 ‘Ethernet ARP를 적용할 인터페이스가 아님’은 다른 이유**다. `ip -4 route get`의 `dev`와 `ip -o link show dev IFACE`의 링크 형식을 먼저 읽는다. `IFACE`는 출력에서 고른 실제 이름으로 바꾸며, ARP를 보기 위해 VPN이나 관리 NIC의 설정·캐시를 바꾸지 않는다. [2주차 VPN의 안쪽·바깥 목적지](../../week-02/CONCEPTS.md#vpn-address-route) · [WireGuard의 IP over UDP 설명](https://www.wireguard.com/#conceptual-overview).
+
 ## 예측과 확인
 
 다른 망의 목적지 `198.51.100.20`으로 보내고 경로 조회에서 `via 192.0.2.1`이 나왔다면 ARP 요청의 대상 IP를 예상한다. 그 다음 `ip -4 neigh show`에서 어느 주소를 찾아야 하는지도 적는다.
