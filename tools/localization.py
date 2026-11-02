@@ -40,13 +40,14 @@ ENGLISH_UI = {
     '다시 찾아보기': 'Reference',
     '전체 개념 색인': 'Concept index',
     '면접·개발 참고자료': 'Developer references',
-    '질문 → 탐색 → 설명 → 확인': 'Ask → explore → explain → test',
+    '질문→탐색→설명→확인': 'Ask → explore → explain → test',
     '자료 검색': 'Search',
+    '학습 메뉴 열기': 'Expand learning menu',
     '학습 메뉴': 'Menu',
     '학습 홈': 'Learning home',
     '현재 위치': 'Breadcrumb',
     '닫기': 'Close',
-    '아주대학교 클라우드 운영 소학회 아올다의<br>4기 네트워크 스터디에서 시작했습니다.': 'Started in the fourth network study group of<br>Aolda, the cloud operations club at Ajou University.',
+    '아주대학교 클라우드 운영 소학회 아올다의 4기 네트워크 스터디에서 시작했습니다.': 'Started in the fourth network study group of Aolda, the cloud operations club at Ajou University.',
 }
 
 

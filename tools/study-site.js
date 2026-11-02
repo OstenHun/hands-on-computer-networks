@@ -3,21 +3,42 @@
   const en = document.documentElement.lang === 'en';
   const menu = document.querySelector('.study-menu');
   const sidebar = document.querySelector('.study-sidebar');
-  function closeMenu() {
-    menu.setAttribute('aria-expanded', 'false');
+  const compact = window.matchMedia('(max-width: 980px)');
+  function setMenu(open) {
+    if (!open && sidebar.contains(document.activeElement)) menu.focus();
+    menu.setAttribute('aria-expanded', String(open));
+    const label = en
+      ? (open ? 'Collapse learning menu' : 'Expand learning menu')
+      : (open ? '학습 메뉴 접기' : '학습 메뉴 펼치기');
+    menu.setAttribute('aria-label', label);
+    menu.querySelector('.study-menu-tooltip').textContent = label;
+    sidebar.hidden = !open;
+    document.body.classList.toggle('study-sidebar-collapsed', !open);
   }
+  function closeMenu() {
+    setMenu(false);
+  }
+  setMenu(!compact.matches);
+  menu.hidden = false;
+  compact.addEventListener('change', () => setMenu(!compact.matches));
   menu.addEventListener('click', () => {
     const open = menu.getAttribute('aria-expanded') === 'true';
-    menu.setAttribute('aria-expanded', String(!open));
+    setMenu(!open);
   });
+  menu.addEventListener('pointerleave', () => delete menu.dataset.tooltipDismissed);
+  menu.addEventListener('blur', () => delete menu.dataset.tooltipDismissed);
   document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && menu.getAttribute('aria-expanded') === 'true') {
+    const editing = event.target.closest('input, textarea, select, [contenteditable="true"]');
+    if (event.key !== 'Escape' || event.defaultPrevented || editing || dialog.open) return;
+    const open = menu.getAttribute('aria-expanded') === 'true';
+    if (open) {
       closeMenu();
       menu.focus();
     }
+    if (open || menu.matches(':hover, :focus-within')) menu.dataset.tooltipDismissed = 'true';
   });
   document.addEventListener('click', event => {
-    if (!sidebar.contains(event.target) && !menu.contains(event.target)) closeMenu();
+    if (compact.matches && !sidebar.contains(event.target) && !menu.contains(event.target)) closeMenu();
   });
   const dialog = document.querySelector('.study-search-dialog');
   const input = dialog.querySelector('input');
@@ -44,7 +65,7 @@
       : (matches.length ? `${matches.length}개의 자료` : '찾는 자료가 없습니다. 주차나 개념 이름을 바꿔 보세요.');
   }
   function openSearch() {
-    closeMenu();
+    if (compact.matches) closeMenu();
     renderSearch();
     dialog.showModal();
     input.focus();

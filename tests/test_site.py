@@ -129,6 +129,15 @@ class IntegratedAuthoring(unittest.TestCase):
         self.assertIn('Write your answer and supporting evidence.', review)
         self.assertNotIn('내 답', review)
 
+    def test_english_menu_label_is_localized_before_javascript(self):
+        for name, data in self.payload.items():
+            if not name.startswith('en/') or not name.endswith('.html'):
+                continue
+            menu = re.search(r'<button class="study-menu"[\s\S]*?</button>', data.decode())
+            if menu is not None:
+                self.assertNotRegex(menu[0], '[가-힣]', name)
+                self.assertIn('aria-label="Expand learning menu"', menu[0], name)
+
     def test_project_links_work_on_both_languages_and_deep_pages(self):
         repo = 'https://github.com/OstenHun/hands-on-computer-networks'
         for name, data in self.payload.items():

@@ -91,8 +91,9 @@ def apply_theme(payload, root, catalog):
         else:
             sidebar += link('en/materials/week-01/sources.html', 'Sources and further reading')
             sidebar += link('index.html', 'Full course (Korean)', ' lang="ko" hreflang="ko"')
-        sidebar += '<div class="sidebar-foot">질문 → 탐색 → 설명 → 확인<br>실습으로 배우는 네트워크</div>'
-        topbar = '<a class="study-skip" href="#main">본문으로 건너뛰기</a><header class="study-topbar"><a class="study-logo" aria-label="실습으로 배우는 네트워크 학습 홈" href="' + href(prefix + 'index.html') + '">실습으로 배우는 네트워크</a><div class="study-top-actions">' + (language_links(name, pairs) if pairs else '') + '<button class="study-search-trigger" type="button" aria-haspopup="dialog">자료 검색 <kbd aria-hidden="true">/</kbd></button><button class="study-menu" type="button" aria-expanded="false" aria-controls="study-sidebar">학습 메뉴</button></div></header><nav id="study-sidebar" class="study-sidebar" aria-label="전체 학습 경로">' + sidebar + '</nav>'
+        sidebar += '<div class="sidebar-foot"><span class="sidebar-method">질문→탐색→설명→확인</span><span>실습으로 배우는 네트워크</span></div>'
+        menu = '<button class="study-menu" type="button" aria-label="학습 메뉴 열기" aria-expanded="false" aria-controls="study-sidebar" hidden><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><rect class="panel-fill" x="4" y="5" width="4" height="14" rx="1"/><rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9 4v16" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span class="study-menu-tooltip" aria-hidden="true">학습 메뉴 열기</span></button>'
+        topbar = '<a class="study-skip" href="#main">본문으로 건너뛰기</a><header class="study-topbar"><div class="study-brand">' + menu + '<a class="study-logo" aria-label="실습으로 배우는 네트워크 학습 홈" href="' + href(prefix + 'index.html') + '">실습으로 배우는 네트워크</a></div><div class="study-top-actions">' + (language_links(name, pairs) if pairs else '') + '<button class="study-search-trigger" type="button" aria-haspopup="dialog">자료 검색 <kbd aria-hidden="true">/</kbd></button></div></header><nav id="study-sidebar" class="study-sidebar" aria-label="전체 학습 경로">' + sidebar + '</nav>'
         breadcrumb = ''
         if name != prefix + 'index.html':
             breadcrumb = '<nav class="study-breadcrumb" aria-label="현재 위치">' + link(prefix + 'index.html', '학습 홈') + '<span aria-hidden="true">/</span>'
@@ -121,7 +122,7 @@ def apply_theme(payload, root, catalog):
         footer_nav = '<nav class="study-project-links" aria-label="프로젝트 안내">' + reference
         footer_nav += ''.join('<a href="' + REPOSITORY_URL + path + '">' + label + '</a>' for path, label in project_links)
         footer_nav += '</nav>'
-        footer = '<div class="study-bottom"><span class="study-footer-origin">아주대학교 클라우드 운영 소학회 아올다의<br>4기 네트워크 스터디에서 시작했습니다.</span>' + footer_nav + '</div></div>'
+        footer = '<div class="study-bottom"><span class="study-footer-origin">아주대학교 클라우드 운영 소학회 아올다의 4기 네트워크 스터디에서 시작했습니다.</span>' + footer_nav + '</div></div>'
         html = html.replace('</body>', (english_shell(footer) if language == 'en' else footer) + search + '</body>')
         # Use the project's own network icon on every generated page.
         html = re.sub(r'<link\b(?=[^>]*\brel=[\"\'](?:shortcut )?icon[\"\'])[^>]*>', '', html, flags=re.I)
