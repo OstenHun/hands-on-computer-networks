@@ -6,6 +6,7 @@ import posixpath
 import re
 from localization import page_language, language_links, english_shell
 
+REPOSITORY_URL = 'https://github.com/OstenHun/hands-on-computer-networks'
 
 
 
@@ -112,7 +113,16 @@ def apply_theme(payload, root, catalog):
             topbar, breadcrumb, search = map(english_shell, (topbar, breadcrumb, search))
         html = re.sub(r'<body([^>]*)>', lambda match: '<body class="study-site"' + match[1] + '>' + topbar + '<div class="study-workspace">' + breadcrumb, html, count=1)
         reference = link('materials/week-01/concept-index.html', '개념 색인 ↗') if language == 'ko' else link('en/materials/week-01/sources.html', 'Sources ↗')
-        footer = '<div class="study-bottom"><div class="study-footer-brand">' + logo + '<span>아주대학교 클라우드 운영 소학회 아올다의<br>4기 네트워크 스터디에서 시작했습니다.</span></div>' + reference + '</div></div>'
+        project_links = (
+            ('', 'GitHub'),
+            ('/issues/new/choose', '오류 제보'),
+            ('/blob/main/CONTRIBUTING.md' + ('#english' if language == 'en' else ''), '기여 안내'),
+            ('/blob/main/LICENSE.md', '라이선스'),
+        )
+        footer_nav = '<nav class="study-project-links" aria-label="프로젝트 안내">' + reference
+        footer_nav += ''.join('<a href="' + REPOSITORY_URL + path + '">' + label + '</a>' for path, label in project_links)
+        footer_nav += '</nav>'
+        footer = '<div class="study-bottom"><div class="study-footer-brand">' + logo + '<span>아주대학교 클라우드 운영 소학회 아올다의<br>4기 네트워크 스터디에서 시작했습니다.</span></div>' + footer_nav + '</div></div>'
         html = html.replace('</body>', (english_shell(footer) if language == 'en' else footer) + search + '</body>')
         # Use one official favicon instead of legacy page-specific placeholders.
         html = re.sub(r'<link\b(?=[^>]*\brel=[\"\'](?:shortcut )?icon[\"\'])[^>]*>', '', html, flags=re.I)

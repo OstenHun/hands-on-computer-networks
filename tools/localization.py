@@ -22,6 +22,10 @@ def language_links(name, pairs):
 
 
 ENGLISH_UI = {
+    '프로젝트 안내': 'Project links',
+    '오류 제보': 'Report an issue',
+    '기여 안내': 'Contribute',
+    '라이선스': 'License',
     '실습으로 배우는 네트워크 학습 홈': 'Hands-on Computer Networks home',
     '실습으로 배우는 네트워크': 'Hands-on Computer Networks',
     '본문으로 건너뛰기': 'Skip to content',

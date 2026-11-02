@@ -10,7 +10,7 @@ This repository uses different licenses for educational content and software. Th
 
 | Material | License |
 | --- | --- |
-| Original lesson text, questions, answers, diagrams and example captures in `content/`, including translations; README files and prose in `docs/` | [CC BY 4.0](LICENSES/CC-BY-4.0.txt) |
+| Original lesson text, questions, answers, diagrams and example captures in `content/`, including translations; project documentation, including README, CONTRIBUTING and prose in `docs/` | [CC BY 4.0](LICENSES/CC-BY-4.0.txt) |
 | Original lab programs in `content/`, including code examples embedded in lessons; site software in `astro/`, `tools/`, `tests/`, `config/` and `.github/`; build and dependency configuration | [MIT](LICENSES/MIT.txt) |
 
 For mixed files such as HTML, Astro templates and Markdown lessons, explanatory text and educational diagrams are CC BY 4.0; program code, styles and functional markup are MIT. Generated pages retain these respective licenses. Generation does not relicense their contents.

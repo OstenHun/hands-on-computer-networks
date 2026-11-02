@@ -129,6 +129,22 @@ class IntegratedAuthoring(unittest.TestCase):
         self.assertIn('Write your answer and supporting evidence.', review)
         self.assertNotIn('내 답', review)
 
+    def test_project_links_work_on_both_languages_and_deep_pages(self):
+        repo = 'https://github.com/OstenHun/hands-on-computer-networks'
+        for name, data in self.payload.items():
+            if not name.endswith('.html') or 'http-equiv="refresh"' in data.decode():
+                continue
+            english = name.startswith('en/')
+            nav = re.findall(r'<nav class="study-project-links"[^>]*>[\s\S]*?</nav>', data.decode())
+            self.assertEqual(len(nav), 1, name)
+            self.assertIn('aria-label="' + ('Project links' if english else '프로젝트 안내') + '"', nav[0])
+            for target in ('', '/issues/new/choose', '/blob/main/LICENSE.md',
+                           '/blob/main/CONTRIBUTING.md' + ('#english' if english else '')):
+                self.assertIn('href="' + repo + target + '"', nav[0], name)
+            if english:
+                self.assertIn('Report an issue', nav[0])
+                self.assertNotRegex(nav[0], '[가-힣]')
+
     def test_link_rewrite_and_download_are_distinct(self):
         review = self.payload['materials/authoring-example/review.html'].decode()
         self.assertIn('href="concepts.html#rtt"', review)

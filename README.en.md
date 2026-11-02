@@ -2,7 +2,7 @@
 
 Summary: Learn computer networking through explanations, Linux experiments, packets and logs. The English path covers the home, study guidance and Week 1 core materials; the full course is in Korean.
 
-**[English learning site](https://ostenhun.github.io/hands-on-computer-networks/en/)** · [한국어](README.md) · [English lesson sources](content/en/materials/week-01/)
+**[Start learning](https://ostenhun.github.io/hands-on-computer-networks/en/)** · [한국어](README.md) · [Report an issue](https://github.com/OstenHun/hands-on-computer-networks/issues/new/choose) · [Contribute](CONTRIBUTING.md#english)
 
 Follow one request from curl to a Python server. Compare HTTP 200, HTTP 404, connection refusal and recovery; explain where the command runs and which addresses and ports identify the endpoints.
 
@@ -24,6 +24,6 @@ The required lab uses Python 3.10+, curl and an authorized Linux environment; No
 
 Learning materials and documentation are licensed under **[CC BY 4.0](LICENSES/CC-BY-4.0.txt)**; lab and site code under **[MIT](LICENSES/MIT.txt)**. You can reuse and adapt lessons, including commercially, with attribution, a license link and a description of changes. Aolda brand assets and third-party materials are excluded. See [license scope and attribution examples](LICENSE.md).
 
-Lesson Markdown, practice files and official-source links live in this repository. Follow the [authoring guide (Korean)](docs/AUTHORING.md) for content changes and the [operations guide (Korean)](docs/OPERATIONS.md) for the publication boundary. External reading remains subject to its original attribution and reuse terms. Do not include participant details, credentials, private environment values or raw operational evidence in contributions.
+Found a typo, an unclear explanation, a broken link or a lab problem? [Open an issue](https://github.com/OstenHun/hands-on-computer-networks/issues/new/choose) or send a small pull request. Issues and PRs are welcome in Korean or English. Discuss larger lesson changes or new labs in an issue first. The [contributing guide](CONTRIBUTING.md#english) explains where to edit and how to validate a change. Lesson sources and lab code are in [content/](content/); translated lessons are in [content/en/](content/en/).
 
-The site is built from public sources with Astro and published on GitHub Pages. To validate a checkout, run `npm ci --ignore-scripts`, `npm test` and `npm run build` using the Node version declared in `package.json`. Building locally does not publish the site or establish that a learner completed the experiments.
+The site is built with Astro and published on GitHub Pages. See [local development](CONTRIBUTING.md#local-development) to preview it. Detailed authoring and operations guides are available in Korean.

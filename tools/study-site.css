@@ -93,6 +93,9 @@ html[lang="en"] .study-site .study-logo { font-size: 20px; letter-spacing: -.02e
 .study-site .study-workspace > footer .shell { padding: 0; }
 .study-site .study-bottom { display: flex; justify-content: space-between; gap: 16px; margin-top: 48px; padding: 24px 42px; border-top: 1px solid var(--line); color: #617486; font-size: 14px; }
 .study-site .study-bottom a { color: #526b7f; text-decoration: none; }
+.study-site .study-project-links { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 4px 18px; }
+.study-site .study-project-links a { display: inline-flex; align-items: center; min-height: 44px; white-space: nowrap; }
+.study-site .study-project-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
 .study-site [id] { scroll-margin-top: 110px; }
 .study-site .study-search-dialog { padding: 0; margin: 12vh auto; width: min(600px, calc(100% - 32px)); max-height: 76dvh; border: 1px solid #d4dfe7; border-radius: 12px; background: #fff; color: var(--ink); box-shadow: 0 16px 70px #16364e26; }
 .study-site .study-search-dialog::backdrop { background: #18324666; }
@@ -224,6 +227,7 @@ html[lang="en"] .study-site .study-logo { font-size: 20px; letter-spacing: -.02e
   .study-site table { font-size: 14px; }
   .study-site .study-workspace > footer { padding: 24px 22px; }
   .study-site .study-bottom { padding: 20px 22px; flex-wrap: wrap; font-size: 14px; }
+  .study-site .study-project-links { justify-content: flex-start; }
   .study-site .learning-home { padding: 32px 22px 0; }
   .study-site .home-heading h1 { font-size: 29px; line-height: 1.5; }
   .study-site .home-heading > p:last-child { font-size: 16px; }
