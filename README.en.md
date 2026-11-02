@@ -22,6 +22,8 @@ The required lab uses Python 3.10+, curl and an authorized Linux environment; No
 
 ## Reuse and contribute
 
+Learning materials and documentation are licensed under **[CC BY 4.0](LICENSES/CC-BY-4.0.txt)**; lab and site code under **[MIT](LICENSES/MIT.txt)**. You can reuse and adapt lessons, including commercially, with attribution, a license link and a description of changes. Aolda brand assets and third-party materials are excluded. See [license scope and attribution examples](LICENSE.md).
+
 Lesson Markdown, practice files and official-source links live in this repository. Follow the [authoring guide (Korean)](docs/AUTHORING.md) for content changes and the [operations guide (Korean)](docs/OPERATIONS.md) for the publication boundary. External reading remains subject to its original attribution and reuse terms. Do not include participant details, credentials, private environment values or raw operational evidence in contributions.
 
 The site is built from public sources with Astro and published on GitHub Pages. To validate a checkout, run `npm ci --ignore-scripts`, `npm test` and `npm run build` using the Node version declared in `package.json`. Building locally does not publish the site or establish that a learner completed the experiments.
