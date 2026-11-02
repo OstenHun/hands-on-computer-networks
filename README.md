@@ -4,7 +4,7 @@
 
 **[학습 사이트 바로가기](https://ostenhun.github.io/aolda-network-study-4th/)** · [전체 개념 색인](https://ostenhun.github.io/aolda-network-study-4th/materials/week-01/concept-index.html) · [교재 원본](content/materials/)
 
-아주대학교 클라우드 운영 소학회 [아올다](https://aoldacloud.com/)의 4기 네트워크 스터디에서 시작한 공개 학습 프로젝트다. 소속과 관계없이 개인 학습과 다른 스터디에서도 활용할 수 있다.
+아주대학교 클라우드 운영 소학회 [아올다](https://www.aoldacloud.com/)의 4기 네트워크 스터디에서 시작한 공개 학습 프로젝트다. 소속과 관계없이 개인 학습과 다른 스터디에서도 활용할 수 있다.
 
 IP 주소와 포트를 배웠어도 연결 실패와 HTTP 오류를 구별하기는 쉽지 않다. 서브넷 계산을 할 수 있어도 패킷이 누구에게 먼저 전달되는지 설명하다 보면 막히는 부분이 생긴다. 이 자료에서는 교재를 읽고 코드를 실행하며 관찰한 결과로 그런 질문에 답을 찾는다.
 
