@@ -21,11 +21,11 @@ A 192.0.2.10 / MAC 02:00:00:00:00:0a
              dst IP 192.0.2.20, dst MAC 02:00:00:00:00:0b
 ```
 
-ARP 요청의 **프레임 목적지**는 브로드캐스트 MAC이고, 질문 안의 **대상 IP**는 찾고 있는 이웃의 IPv4다. 해당 IP를 가진 쪽이 자기 MAC을 답하면 보낸 쪽은 대응을 저장할 수 있다. [앞 주제](03-next-hop.md)처럼 다른 망 목적지는 먼 서버 IP가 아니라 **게이트웨이 IP**의 MAC을 찾는다. 따라서 캡처의 ARP 대상 IP와 HTTP 요청의 최종 목적지 IP가 다를 수 있다.
+ARP 요청의 **프레임 목적지**는 브로드캐스트 MAC이고, 질문 안의 **대상 IP**는 찾고 있는 이웃의 IPv4다. 이 예제에서 묻는 IP는 `192.0.2.20`이며 서브넷의 IPv4 브로드캐스트 주소 `192.0.2.255`가 아니다. 해당 IP를 가진 쪽이 자기 MAC을 답하면 보낸 쪽은 대응을 저장할 수 있다. [앞 주제](03-next-hop.md)처럼 다른 망 목적지는 먼 서버 IP가 아니라 **게이트웨이 IP**의 MAC을 찾는다. 따라서 캡처의 ARP 대상 IP와 HTTP 요청의 최종 목적지 IP가 다를 수 있다.
 
 Linux의 `ip -4 neigh show`는 IPv4 이웃 정보를 **조회**한다. 예를 들어 `192.0.2.20 dev ens3 lladdr 02:00:00:00:00:0b REACHABLE`이라는 줄은 설명용 출력이다. `lladdr`가 링크 주소다. `REACHABLE`, `STALE`, `INCOMPLETE`, `FAILED`는 이웃 정보의 서로 다른 상태이고, 한 순간의 표기만으로 전체 통신 결과를 판정하지 않는다. 이웃 정보가 이미 있으면 다음 통신에서 새 ARP 요청이 보이지 않을 수 있다. 따라서 “캡처에 ARP 없음”만으로 ARP를 쓰지 않았다고 결론낼 수 없다. 캐시 삭제는 현재 SSH 경로에 영향을 줄 수 있으므로 이번 읽기 과제에는 넣지 않는다.
 
-IPv6의 주소 탐색은 별도 **Neighbor Discovery Protocol(NDP)**을 사용한다. 이 설명은 **Linux의 IPv4 over Ethernet**에 한정한다. `lo`에는 이 Ethernet ARP 흐름을 적용하지 않는다.
+IPv6의 주소 탐색은 별도 Neighbor Discovery Protocol(NDP)을 사용한다. 이 설명은 **Linux의 IPv4 over Ethernet**에 한정한다. `lo`에는 이 Ethernet ARP 흐름을 적용하지 않는다.
 
 <span id="interface-arp"></span>
 
@@ -37,8 +37,8 @@ IPv6의 주소 탐색은 별도 **Neighbor Discovery Protocol(NDP)**을 사용�
 | --- | --- |
 | VM의 Ethernet NIC | 다음 홉의 IPv4→MAC 매핑을 이웃 정보에서 찾는다. 캐시가 있으면 새 ARP가 안 보일 수 있다 |
 | 루프백 `lo` | 같은 호스트 안의 전달이다. 위 Ethernet ARP 흐름을 요구하지 않는다 |
-| 기본 WireGuard 터널 인터페이스 | 안쪽 IP 패킷을 다룬다. Ethernet 목적 MAC을 채우기 위한 ARP를 터널 자체에 요구하지 않는다 |
-| WireGuard 바깥 패킷이 나가는 실제 링크 | Endpoint로 가는 바깥 UDP/IP 패킷을 전달한다. 그 링크가 Ethernet이면 다음 홉의 MAC 매핑이 필요할 수 있다 |
+| WireGuard 터널 인터페이스 | 안쪽 IP 패킷을 다룬다. Ethernet 목적 MAC을 채우기 위한 ARP를 터널 자체에 요구하지 않는다 |
+| WireGuard 바깥 패킷이 나가는 실제 링크 | Endpoint로 가는 바깥 UDP/IP 패킷을 전달한다. 일반적인 IPv4 Ethernet·Wi-Fi 링크에서는 다음 홉의 MAC을 찾는 데 ARP를 사용할 수 있다 |
 
 따라서 **‘캐시가 있어 새 ARP가 없음’과 ‘Ethernet ARP를 적용할 인터페이스가 아님’은 다른 이유**다. `ip -4 route get`의 `dev`와 `ip -o link show dev IFACE`의 링크 형식을 먼저 읽는다. `IFACE`는 출력에서 고른 실제 이름으로 바꾸며, ARP를 보기 위해 VPN이나 관리 NIC의 설정·캐시를 바꾸지 않는다. [2주차 VPN의 안쪽·바깥 목적지](../../week-02/CONCEPTS.md#vpn-address-route) · [WireGuard의 IP over UDP 설명](https://www.wireguard.com/#conceptual-overview).
 
