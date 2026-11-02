@@ -22,7 +22,7 @@ The required lab uses Python 3.10+, curl and an authorized Linux environment; No
 
 ## Reuse and contribute
 
-Learning materials and documentation are licensed under **[CC BY 4.0](LICENSES/CC-BY-4.0.txt)**; lab and site code under **[MIT](LICENSES/MIT.txt)**. You can reuse and adapt lessons, including commercially, with attribution, a license link and a description of changes. Aolda brand assets and third-party materials are excluded. See [license scope and attribution examples](LICENSE.md).
+Learning materials and documentation are licensed under **[CC BY 4.0](LICENSES/CC-BY-4.0.txt)**; lab and site code and the original network icon under **[MIT](LICENSES/MIT.txt)**. You can reuse and adapt lessons, including commercially, with attribution, a license link and a description of changes. Rights in Aolda's name and third-party materials are excluded. See [license scope and attribution examples](LICENSE.md).
 
 Found a typo, an unclear explanation, a broken link or a lab problem? [Open an issue](https://github.com/OstenHun/hands-on-computer-networks/issues/new/choose) or send a small pull request. Issues and PRs are welcome in Korean or English. Discuss larger lesson changes or new labs in an issue first. The [contributing guide](CONTRIBUTING.md#english) explains where to edit and how to validate a change. Lesson sources and lab code are in [content/](content/); translated lessons are in [content/en/](content/en/).
 

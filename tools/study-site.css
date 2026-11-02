@@ -17,9 +17,6 @@
 .study-site .study-topbar { position: sticky; top: 0; z-index: 3; display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 76px; margin: 0; padding: 0 36px; background: #fff; border-bottom: 1px solid var(--line); }
 .study-site .study-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; font-size: 22px; font-weight: 800; color: var(--blue); letter-spacing: -.06em; }
 .study-site .study-logo { flex-shrink: 1; min-width: 0; min-height: 44px; line-height: 1.4; }
-.study-site .study-brand-image { display: block; width: 119px; height: auto; object-fit: contain; flex-shrink: 0; }
-.study-site .study-footer-brand { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
-.study-site .study-footer-brand .study-brand-image { width: 95px; }
 .study-site .study-logo small { margin: 1px 0 0 9px; padding-left: 18px; border-left: 1px solid #d8e3eb; color: var(--muted); font-size: 14px; font-weight: 500; letter-spacing: 0; }
 .study-site .study-top-actions { display: flex; flex-shrink: 0; gap: 12px; align-items: center; }
 .study-site .study-language { display: flex; align-items: center; font-size: 13px; line-height: 1.5; white-space: nowrap; }
@@ -120,7 +117,7 @@ html[lang="en"] .study-site .study-logo { font-size: 20px; letter-spacing: -.02e
 .study-site .learning-home { max-width: 1260px; margin: 0 auto; padding: 50px 48px 0; }
 .study-site .kicker { font-size: 14px; font-weight: 700; color: #687d8e; letter-spacing: .02em; margin: 0 0 14px; }
 .study-site .home-heading { position: relative; padding-right: 190px; }
-.study-site .home-brand-symbol { position: absolute; right: 0; top: 38px; width: 160px; height: 160px; }
+.study-site .home-network-symbol { position: absolute; right: 0; top: 38px; width: 160px; height: 160px; }
 .study-site .home-heading h1 { font-size: clamp(30px, 3.25vw, 48px); font-weight: 800; line-height: 1.45; margin: 0 0 18px; letter-spacing: -.055em; }
 .study-site .home-heading > p:last-child { color: var(--muted); font-size: 16px; line-height: 1.95; max-width: 46rem; margin: 0; }
 .study-site .home-origin { color: var(--muted); font-size: 14px; margin: 20px 0 0; }
@@ -172,7 +169,7 @@ html[lang="en"] .study-site .study-logo { font-size: 20px; letter-spacing: -.02e
 @media (min-width: 1680px) { .study-site { --sidebar: 254px; } .study-site .learning-home { padding-top: 60px; } }
 @media (max-width: 1200px) {
   .study-site .home-heading { padding-right: 0; }
-  .study-site .home-brand-symbol { display: none; }
+  .study-site .home-network-symbol { display: none; }
   .study-site { --sidebar: 216px; }
   .study-site .study-sidebar { padding-inline: 12px; }
   .study-site .document-layout { grid-template-columns: minmax(0,1fr); gap: 24px; }
@@ -206,7 +203,6 @@ html[lang="en"] .study-site .study-logo { font-size: 20px; letter-spacing: -.02e
   .study-site { font-size: 16px; }
   .study-site .study-topbar { padding: 6px 18px; gap: 10px; height: 108px; flex-wrap: wrap; }
   .study-site .study-logo { font-size: 16px; gap: 9px; }
-  .study-site .study-logo .study-brand-image { width: 99px; }
   .study-site .study-logo small { display: none; }
   .study-site .study-search-trigger { gap: 0; padding-inline: 10px; font-size: 14px; }
   .study-site .study-search-trigger kbd { display: none; }

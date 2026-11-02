@@ -11,7 +11,7 @@ This repository uses different licenses for educational content and software. Th
 | Material | License |
 | --- | --- |
 | Original lesson text, questions, answers, diagrams and example captures in `content/`, including translations; project documentation, including README, CONTRIBUTING and prose in `docs/` | [CC BY 4.0](LICENSES/CC-BY-4.0.txt) |
-| Original lab programs in `content/`, including code examples embedded in lessons; site software in `astro/`, `tools/`, `tests/`, `config/` and `.github/`; build and dependency configuration | [MIT](LICENSES/MIT.txt) |
+| Original lab programs in `content/`, including code examples embedded in lessons; site software in `astro/`, `tools/`, `tests/`, `config/` and `.github/`; build and dependency configuration; `content/assets/network-icon.svg` | [MIT](LICENSES/MIT.txt) |
 
 For mixed files such as HTML, Astro templates and Markdown lessons, explanatory text and educational diagrams are CC BY 4.0; program code, styles and functional markup are MIT. Generated pages retain these respective licenses. Generation does not relicense their contents.
 
@@ -25,7 +25,7 @@ For MIT code, include the copyright and permission notice when redistributing co
 
 ## Exclusions
 
-- Aolda's name, logo and icon, including `content/assets/aolda-logo.svg` and `content/assets/aolda-icon.svg`, are not licensed under CC BY 4.0 or MIT by this project. See [brand asset sources](docs/BRAND.md). This project does not grant trademark rights or imply endorsement.
+- Aolda's name and third-party brand rights are not licensed by this project. Aolda logo and icon files are not included in the current source or site. The project's own network icon is MIT-licensed; see [project identity and icon](docs/BRAND.md). This project does not grant third-party trademark rights or imply endorsement.
 - Third-party quotations, copied material, linked official documentation and dependencies retain their original terms. Source links are not grants of permission to redistribute those works. Existing third-party notices take precedence for the material they identify.
 - These grants cover only rights that the respective authors are entitled to license. They do not grant rights over third-party material merely because it appears in, or is linked from, the repository.
 

@@ -168,17 +168,22 @@ class IntegratedAuthoring(unittest.TestCase):
         self.assertIn('href="../../assets/lesson.css"', index)
         self.assertNotIn('example-index.html', self.payload)
 
-    def test_official_brand_assets_on_deep_pages(self):
-        for name in ('index.html', 'materials/week-01/concepts.html', 'materials/week-04/review.html'):
-            html = self.payload[name].decode()
-            self.assertNotIn('study-logo-mark', html)
-            self.assertIn('aria-label="실습으로 배우는 네트워크 학습 홈"', html)
-            self.assertEqual(html.count('rel="icon"'), 1)
-            self.assertIn('assets/aolda-logo.svg', html)
-            self.assertIn('assets/aolda-icon.svg', html)
-        for name in ('aolda-logo.svg', 'aolda-icon.svg'):
-            original = (ROOT / 'content/assets' / name).read_bytes()
-            self.assertEqual(self.payload['assets/' + name], original)
+    def test_only_project_network_icon_is_published(self):
+        for name, data in self.payload.items():
+            self.assertNotIn('aolda-logo.svg', name)
+            self.assertNotIn('aolda-icon.svg', name)
+            if not name.endswith('.html') or 'http-equiv="refresh"' in data.decode():
+                continue
+            html = data.decode()
+            self.assertNotIn('aolda-logo.svg', html, name)
+            self.assertNotIn('aolda-icon.svg', html, name)
+            self.assertEqual(html.count('rel="icon"'), 1, name)
+            icon = re.search(r'<link rel="icon"[^>]*href="([^"]+)"', html)[1]
+            self.assertEqual(builder.resolve(name, icon), 'assets/network-icon.svg', name)
+        self.assertEqual(self.payload['assets/network-icon.svg'],
+                         (ROOT / 'content/assets/network-icon.svg').read_bytes())
+        for home in ('index.html', 'en/index.html'):
+            self.assertIn('class="home-network-symbol"', self.payload[home].decode())
 
     def test_old_sources_body_scripts_and_styles_unchanged(self):
         baseline = builder.collect_content()
